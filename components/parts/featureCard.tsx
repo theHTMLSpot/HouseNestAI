@@ -1,3 +1,5 @@
+"use client";
+
 import { Card } from "../ui/components";
 
 export default function FeatureCard({

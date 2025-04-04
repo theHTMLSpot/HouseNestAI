@@ -1,3 +1,5 @@
+"use client";
+
 import React, { JSX } from 'react';
 import { ButtonProps, InputProps, TitleProps, ModalProps, CardProps, DropdownProps } from '@/types/UIprops';
 import Image from 'next/image'; // Fixed import for next/image

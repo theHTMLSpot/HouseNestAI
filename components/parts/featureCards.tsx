@@ -1,3 +1,5 @@
+"use client";
+
 import FeatureCard from "./featureCard";
 
 export default function FeatureCards() {
