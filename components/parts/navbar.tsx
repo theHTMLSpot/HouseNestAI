@@ -12,7 +12,6 @@ export default function Navbar() {
         <a href="#contact" className="hover:text-[#4d7298]">
           Contact
         </a>
-        
       </div>
     </div>
   );
