@@ -1,8 +1,14 @@
 "use client";
 
-import React, { JSX } from 'react';
-import { ButtonProps, InputProps, TitleProps, ModalProps, CardProps, DropdownProps } from '@/types/UIprops';
-import Image from 'next/image'; // Fixed import for next/image
+import {
+  ButtonProps,
+  InputProps,
+  TitleProps,
+  ModalProps,
+  CardProps,
+  DropdownProps,
+} from "@/types/UIprops";
+import Image from "next/image"; // Fixed import for next/image
 
 // Button Component
 const Button: React.FC<ButtonProps> = ({ label, onClick, className }) => {
@@ -48,25 +54,85 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
+// Title Component
+
+const Title: React.FC<TitleProps> = ({ text, level = 1, className = "" }) => {
+  const sizeMap: Record<number, { size: string; weight: string }> = {
+    1: { size: "text-[2rem]", weight: "font-bold" },
+    2: { size: "text-[1.5rem]", weight: "font-semibold" },
+    3: { size: "text-[1.25rem]", weight: "font-medium" },
+    4: { size: "text-[1rem]", weight: "font-normal" },
+    5: { size: "text-[0.875rem]", weight: "font-normal" },
+    6: { size: "text-[0.5rem]", weight: "font-light" },
+  };
+
+  const { size, weight } = sizeMap[level] ?? {
+    size: "text-base",
+    weight: "font-normal",
+  };
+
+  const hasTextSize = /text-(\[\d+rem\]|xs|sm|base|lg|xl|[2-9]xl)/.test(
+    className,
+  );
+  const hasFontWeight =
+    /font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/.test(
+      className,
+    );
+
+  const finalClassName = [
+    !hasTextSize && size,
+    !hasFontWeight && weight,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return <p className={finalClassName}>{text}</p>;
+};
+
 // Card Component
-const Card: React.FC<CardProps> = ({ title, description, imageUrl, onClick, className }) => {
+const Card: React.FC<CardProps> = ({
+  title,
+  description,
+  titleLevel = 1,
+  descriptionLevel = 5,
+  titleClassName,
+  descriptionClassName,
+  imageUrl,
+  onClick,
+  className,
+}) => {
   return (
-    <div className={`card ${className}`} onClick={onClick}>
-      {imageUrl && <Image src={imageUrl} alt={title} width={150} height={150} />} {/* Added width and height */}
-      <h3>{title}</h3>
-      <p>{description}</p>
+    <div
+      className={`flex flex-col items-center justify-center ${className}`}
+      onClick={onClick}
+    >
+      {imageUrl && (
+        <Image src={imageUrl} alt={title} width={150} height={150} />
+      )}{" "}
+      {/* Added width and height */}
+      <Title
+        text={title}
+        level={titleLevel}
+        className={`m-2 text-center ${titleClassName}`}
+      />
+      <Title
+        text={description}
+        level={descriptionLevel}
+        className={`m-2 text-center ${descriptionClassName}`}
+      />
     </div>
   );
 };
 
-// Title Component
-const Title: React.FC<TitleProps> = ({ text, level = 1, className }) => {
-  const Heading = `h${level}` as keyof JSX.IntrinsicElements;
-  return <Heading className={className}>{text}</Heading>;
-};
-
 // Modal Component
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, className }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  className,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -81,7 +147,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, classNa
 };
 
 // Dropdown Component
-const Dropdown: React.FC<DropdownProps> = ({ options, onSelect, className }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  options,
+  onSelect,
+  className,
+}) => {
   return (
     <select className={className} onChange={(e) => onSelect(e.target.value)}>
       {options.map((option, index) => (

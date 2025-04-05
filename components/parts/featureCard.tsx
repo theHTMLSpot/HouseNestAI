@@ -5,23 +5,21 @@ import { Card } from "../ui/components";
 export default function FeatureCard({
   title,
   description,
-  imageUrl,
-  onClick,
   className,
 }: {
   title: string;
   description: string;
-  imageUrl?: string;
-  onClick?: () => void;
   className?: string;
 }) {
   return (
     <Card
       title={title}
       description={description}
-      imageUrl={imageUrl}
-      onClick={onClick}
-      className={`flex flex-col items-center justify-center p-4 border rounded-lg shadow-md ${className}`}
+      titleLevel={3}
+      descriptionLevel={4}
+      titleClassName="text-[#aabfc6] font-bold"
+      descriptionClassName="text-[#7f8e92]"
+      className={`flex flex-col items-center justify-center rounded-lg border p-8 shadow-md ${className} h-57 w-75 bg-[#11171a] text-gray-100 transition-transform duration-300 ease-in-out hover:translate-y-[-0.75rem] hover:scale-[1.05] md:h-45 md:w-55`}
     />
   );
 }
