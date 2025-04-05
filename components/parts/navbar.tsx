@@ -12,12 +12,6 @@ export default function Navbar() {
         <a href="#contact" className="hover:text-[#4d7298]">
           Contact
         </a>
-        <a href="#about" className="hover:text-[#4d7298]">
-          login
-        </a>
-        <a href="#about" className="hover:text-[#4d7298]">
-          register
-        </a>
       </div>
     </div>
   );
