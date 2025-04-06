@@ -7,7 +7,7 @@ import Cta from "@/components/parts/cta";
 export default function AboutPage() {
   return (
     <>
-    <div className="flex min-h-screen items-center justify-around bg-[#11171a] p-20 text-gray-100">
+    <div className="flex min-h-screen items-center justify-between bg-[#11171a] p-30 text-gray-100 lg:flex-row flex-col">
       <div className="flex max-w-screen sm:max-w-[45vw] flex-col items-center justify-center p-6">
         <Title
           text="Our Mission"
