@@ -22,25 +22,25 @@ export default function Navbar() {
       <div className="text-2xl font-bold">House Nest AI</div>
       <div className="flex items-center justify-center space-x-4">
         <Link
-          href="#features"
-          className={`hover:text-[#4d7298] ${pathname === "/" ? "text-semibold hover:bold" : ""}`}
+          href="/"
+          className={`hover:text-[#4d7298] ${pathname === "/" ? "font-semibold hover:font-bold" : ""}`}
         >
           Home
         </Link>
         <Link
-          href="#features"
-          className={`hover:text-[#4d7298] ${pathname === "/features" ? "text-semibold hover:bold" : ""}`}
+          href="features"
+          className={`hover:text-[#4d7298] ${pathname === "/features" ? "font-semibold hover:font-bold" : ""}`}
         >
           Features
         </Link>
         <Link
-          href="#about"
+          href="about"
           className={`hover:text-[#4d7298] ${pathname === "/about" ? "font-semibold hover:font-bold" : ""}`}
         >
           About
         </Link>
         <Link
-          href="#contact"
+          href="contact"
           className={`hover:text-[#4d7298] ${pathname === "/contact" ? "font-semibold hover:font-bold" : ""}`}
         >
           Contact
