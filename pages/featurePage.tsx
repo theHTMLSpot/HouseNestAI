@@ -8,9 +8,9 @@ import Image from "next/image";
 export default function FeaturesPage() {
   return (
     <>
-      <div className="flex min-h-screen items-center justify-between bg-[#11171a] p-30 text-gray-100 lg:flex-row flex-col">
+      <div className="flex min-h-screen flex-col items-center justify-between bg-[#11171a] p-30 text-gray-100 lg:flex-row">
         {/* Image Section */}
-        <div className="relative hidden min-w-[35vw] h-[500px] sm:block">
+        <div className="relative hidden h-[500px] min-w-[35vw] sm:block">
           <Image
             src="/images/features.jpg"
             alt="About House Nest AI"
@@ -21,7 +21,7 @@ export default function FeaturesPage() {
         </div>
 
         {/* Text Section */}
-        <div className="flex flex-col items-center justify-center p-6 text-center max-w-[45vw] lg:max-w-[30vw]">
+        <div className="flex max-w-[45vw] flex-col items-center justify-center p-6 text-center lg:max-w-[30vw]">
           <Title
             text="Our Features"
             level={1}
@@ -38,12 +38,12 @@ export default function FeaturesPage() {
       </div>
 
       {/* Feature Cards Section */}
-      <div className="flex items-center justify-center py-20 bg-[#11171a] text-gray-100">
-        <div className="flex flex-col container mx-auto text-center items-center justify-center">
+      <div className="flex items-center justify-center bg-[#11171a] py-20 text-gray-100">
+        <div className="container mx-auto flex flex-col items-center justify-center text-center">
           <Title
             text="Our Unique Features"
             level={2}
-            className="text-3xl font-bold text-[#aabfc6] mb-10"
+            className="mb-10 text-3xl font-bold text-[#aabfc6]"
           />
           <FeatureCards />
         </div>

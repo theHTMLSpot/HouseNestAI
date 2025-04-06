@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Title, Input } from "@/components/ui/components"; 
+import { Title, Input } from "@/components/ui/components";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -56,12 +56,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#11171a] flex items-center justify-center">
-      <div className="bg-[#1b252b] p-8 rounded-lg shadow-lg max-w-md w-full">
+    <div className="flex min-h-screen items-center justify-center bg-[#11171a]">
+      <div className="w-full max-w-md rounded-lg bg-[#1b252b] p-8 shadow-lg">
         <Title
           text="Login"
           level={2}
-          className="text-3xl font-bold text-[#aabfc6] mb-6 text-center"
+          className="mb-6 text-center text-3xl font-bold text-[#aabfc6]"
         />
 
         <form onSubmit={handleSubmit}>
@@ -73,10 +73,12 @@ export default function LoginPage() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="w-full p-3 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56] focus:outline-none focus:ring-2 focus:ring-[#aabfc6] transition"
+              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
               required
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
 
           {/* Password Input */}
@@ -87,16 +89,18 @@ export default function LoginPage() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className="w-full p-3 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56] focus:outline-none focus:ring-2 focus:ring-[#aabfc6] transition"
+              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
               required
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password}</p>
+            )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-md bg-[#aabfc6] text-[#11171a] font-semibold hover:bg-[#8e9aaf] transition"
+            className="w-full rounded-md bg-[#aabfc6] py-3 font-semibold text-[#11171a] transition hover:bg-[#8e9aaf]"
           >
             Login
           </button>

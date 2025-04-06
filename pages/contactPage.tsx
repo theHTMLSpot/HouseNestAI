@@ -20,7 +20,11 @@ export default function ContactPage() {
     message: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -62,9 +66,13 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#11171a] text-gray-100 p-8">
-      <div className="max-w-lg mx-auto">
-        <Title text="Contact Us" level={1} className="text-4xl font-bold text-[#aabfc6] mb-6" />
+    <div className="min-h-screen bg-[#11171a] p-8 text-gray-100">
+      <div className="mx-auto max-w-lg">
+        <Title
+          text="Contact Us"
+          level={1}
+          className="mb-6 text-4xl font-bold text-[#aabfc6]"
+        />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -74,10 +82,14 @@ export default function ContactPage() {
               placeholder="First Name"
               value={formData.firstName}
               onChange={handleChange}
-              className="w-full p-4 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56]"
+              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-4 text-[#aabfc6]"
               required
             />
-            {formErrors.firstName && <span className="text-red-500 text-sm">{formErrors.firstName}</span>}
+            {formErrors.firstName && (
+              <span className="text-sm text-red-500">
+                {formErrors.firstName}
+              </span>
+            )}
           </div>
 
           <div>
@@ -87,10 +99,14 @@ export default function ContactPage() {
               placeholder="Last Name"
               value={formData.lastName}
               onChange={handleChange}
-              className="w-full p-4 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56]"
+              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-4 text-[#aabfc6]"
               required
             />
-            {formErrors.lastName && <span className="text-red-500 text-sm">{formErrors.lastName}</span>}
+            {formErrors.lastName && (
+              <span className="text-sm text-red-500">
+                {formErrors.lastName}
+              </span>
+            )}
           </div>
 
           <div>
@@ -98,7 +114,7 @@ export default function ContactPage() {
               name="queryType"
               value={formData.queryType}
               onChange={handleChange}
-              className="w-full p-5 pr-12 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56] appearance-none focus:outline-none focus:ring-2 focus:ring-[#aabfc6] transition"
+              className="w-full appearance-none rounded-md border border-[#444d56] bg-[#222b30] p-5 pr-12 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
             >
               <option value="">Select Query Type</option>
               <option value="General Inquiry">General Inquiry</option>
@@ -123,10 +139,12 @@ export default function ContactPage() {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-4 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56]"
+              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-4 text-[#aabfc6]"
               required
             />
-            {formErrors.email && <span className="text-red-500 text-sm">{formErrors.email}</span>}
+            {formErrors.email && (
+              <span className="text-sm text-red-500">{formErrors.email}</span>
+            )}
           </div>
 
           <div>
@@ -135,15 +153,17 @@ export default function ContactPage() {
               placeholder="Your Message"
               value={formData.message}
               onChange={handleChange}
-              className="w-full p-4 rounded-md bg-[#222b30] text-[#aabfc6] border border-[#444d56] h-32"
+              className="h-32 w-full rounded-md border border-[#444d56] bg-[#222b30] p-4 text-[#aabfc6]"
               required
             />
-            {formErrors.message && <span className="text-red-500 text-sm">{formErrors.message}</span>}
+            {formErrors.message && (
+              <span className="text-sm text-red-500">{formErrors.message}</span>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-[#aabfc6] text-[#11171a] rounded-md hover:bg-[#8eafbb] transition"
+            className="w-full rounded-md bg-[#aabfc6] py-3 text-[#11171a] transition hover:bg-[#8eafbb]"
           >
             Submit
           </button>
