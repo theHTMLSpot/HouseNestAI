@@ -22,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, className }) => {
 // Input Component
 const Input: React.FC<InputProps> = ({
   type,
+  name,
   placeholder,
   value,
   onChange,
@@ -38,6 +39,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <input
       type={type}
+      name={name}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
