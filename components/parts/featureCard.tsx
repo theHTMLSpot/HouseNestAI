@@ -19,7 +19,7 @@ export default function FeatureCard({
       descriptionLevel={4}
       titleClassName="text-[#aabfc6] font-bold"
       descriptionClassName="text-[#7f8e92]"
-      className={`flex flex-col items-center justify-center rounded-lg border p-8 shadow-md ${className} h-57 w-75 bg-[#11171a] text-gray-100 transition-transform duration-300 ease-in-out hover:translate-y-[-0.75rem] hover:scale-[1.05] md:h-45 md:w-55`}
+      className={`flex flex-col items-center justify-center rounded-lg border p-8 shadow-md ${className} h-auto w-full max-w-xs bg-[#11171a] text-gray-100 transition-transform duration-300 ease-in-out hover:translate-y-[-0.75rem] hover:scale-[1.05] hover:shadow-lg`}
     />
   );
 }

@@ -2,20 +2,22 @@
 
 import FeatureCard from "./featureCard";
 
-export default function FeatureCards() {
+export default function FeatureCards({ className }: { className?: string }) {
   return (
-    <div className="grid grid-cols-1 gap-15 p-4 sm:grid-cols-3 sm:gap-10 md:gap-7">
+    <div
+      className={`grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 p-4 ${className}`}
+    >
       <FeatureCard
-        title="Easy Use"
-        description="Find your listing in seconds, not hours"
+        title="Effortless Search"
+        description="Find your ideal listing in seconds – no more endless scrolling."
       />
       <FeatureCard
-        title="Compare Your Way"
-        description="We make it easy to compare listings in your own way"
+        title="Tailored Comparisons"
+        description="Compare listings the way that works best for you, with total flexibility."
       />
       <FeatureCard
-        title="AI Powered"
-        description="Get the best listing for you with our AI powered system"
+        title="AI-Driven Recommendations"
+        description="Let our AI-powered system recommend the perfect listing for your needs."
       />
     </div>
   );
