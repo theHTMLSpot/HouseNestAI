@@ -19,7 +19,7 @@ export default function Navbar() {
     router.push("/signup");
   };
 
-  const signedIn = false; //! Replace with actual authentication logic
+  const signedIn = true; //! Replace with actual authentication logic
 
   return (
     <div className="flex w-full items-center justify-between border-b-2 border-b-[#4d7298] bg-[#2c3438] p-4 text-[#aabfc6]">
@@ -64,11 +64,9 @@ export default function Navbar() {
           </Link>
           {signedIn ? (
             <>
-              <Link href="/dashboard" className="hover:text-[#4d7298]">
-                Dashboard
-              </Link>
-              <Link href="/login" className="hover:text-[#4d7298]">
-                Logout
+          
+              <Link href="/compare" className="hover:text-[#4d7298]">
+                Compare
               </Link>
             </>
           ) : (
@@ -116,11 +114,8 @@ export default function Navbar() {
         </Link>
         {signedIn ? (
           <>
-            <Link href="/dashboard" className="hover:text-[#4d7298]">
-              Dashboard
-            </Link>
-            <Link href="/login" className="hover:text-[#4d7298]">
-              Logout
+            <Link href="/compare" className="hover:text-[#4d7298]">
+              Compare
             </Link>
           </>
         ) : (
