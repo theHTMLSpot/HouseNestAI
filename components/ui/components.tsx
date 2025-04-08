@@ -35,27 +35,35 @@ const Input: React.FC<InputProps> = ({
   autoComplete,
   autoFocus,
   readOnly,
+  error, // Destructure error prop
 }) => {
   return (
-    <input
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className={className}
-      disabled={disabled}
-      required={required}
-      maxLength={maxLength}
-      minLength={minLength}
-      pattern={pattern}
-      autoComplete={autoComplete}
-      autoFocus={autoFocus}
-      readOnly={readOnly}
-    />
+    <div className="relative">
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className={`${className} ${error ? 'border-red-500' : 'border-[#444d56]'} p-4 rounded-md w-full`} // Apply red border if error
+        disabled={disabled}
+        required={required}
+        maxLength={maxLength}
+        minLength={minLength}
+        pattern={pattern}
+        autoComplete={autoComplete}
+        autoFocus={autoFocus}
+        readOnly={readOnly}
+      />
+      {/* Show error message */}
+      {error && (
+        <span className="text-red-500 text-sm absolute right-2 bottom-1">
+          {error}
+        </span>
+      )}
+    </div>
   );
 };
-
 // Title Component
 
 const Title: React.FC<TitleProps> = ({ text, level = 1, className = "" }) => {
@@ -103,6 +111,7 @@ const Card: React.FC<CardProps> = ({
   imageUrl,
   onClick,
   className,
+  children,
 }) => {
   return (
     <div
@@ -111,18 +120,18 @@ const Card: React.FC<CardProps> = ({
     >
       {imageUrl && (
         <Image src={imageUrl} alt={title} width={150} height={150} />
-      )}{" "}
-      {/* Added width and height */}
+      )}
       <Title
         text={title}
         level={titleLevel}
         className={`m-2 text-center ${titleClassName}`}
       />
       <Title
-        text={description}
+        text={description || ""}
         level={descriptionLevel}
         className={`m-2 text-center ${descriptionClassName}`}
       />
+      {children}
     </div>
   );
 };

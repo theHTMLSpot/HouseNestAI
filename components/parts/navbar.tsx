@@ -64,9 +64,11 @@ export default function Navbar() {
           </Link>
           {signedIn ? (
             <>
-          
               <Link href="/compare" className="hover:text-[#4d7298]">
                 Compare
+              </Link>
+              <Link href="/profile" className="hover:text-[#4d7298]">
+                Profile
               </Link>
             </>
           ) : (
@@ -116,6 +118,9 @@ export default function Navbar() {
           <>
             <Link href="/compare" className="hover:text-[#4d7298]">
               Compare
+            </Link>
+            <Link href="/profile" className="hover:text-[#4d7298]">
+              Profile
             </Link>
           </>
         ) : (

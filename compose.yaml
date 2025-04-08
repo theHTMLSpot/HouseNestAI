@@ -1,0 +1,9 @@
+services:
+  server:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules # Prevents local node_modules from overwriting container's
+    command: npm run dev

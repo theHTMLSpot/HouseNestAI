@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Title, Input } from "@/components/ui/components";
+import { Card, Input } from "@/components/ui/components";
 
 export default function CardDetailsPage() {
   const [formData, setFormData] = useState({
@@ -66,74 +66,67 @@ export default function CardDetailsPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#11171a]">
-      <div className="w-full max-w-md rounded-lg bg-[#1b252b] p-8 shadow-lg">
-        <Title
-          text="Card Details"
-          level={2}
-          className="mb-6 text-center text-3xl font-bold text-[#aabfc6]"
-        />
+    <Card
+      title="Card Details"
+      titleLevel={2}
+      titleClassName="mb-6 text-center text-3xl font-bold text-[#aabfc6]"
+      className="w-full max-w-md rounded-lg bg-[#1b252b] p-8 shadow-lg"
+    >
+      <form className="w-full" onSubmit={handleSubmit}>
+        {/* Card Number Input */}
+        <div className="mb-4">
+          <Input
+            type="text"
+            name="cardNumber"
+            value={formData.cardNumber}
+            onChange={handleChange}
+            placeholder="Enter your card number"
+            className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
+            required
+          />
+          {errors.cardNumber && (
+            <p className="text-sm text-red-500">{errors.cardNumber}</p>
+          )}
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* Card Number Input */}
-          <div className="mb-4">
-            <Input
-              type="text"
-              name="cardNumber"
-              value={formData.cardNumber}
-              onChange={handleChange}
-              placeholder="Enter your card number"
-              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
-              required
-            />
-            {errors.cardNumber && (
-              <p className="text-sm text-red-500">{errors.cardNumber}</p>
-            )}
-          </div>
+        {/* Expiration Date Input */}
+        <div className="mb-4">
+          <Input
+            type="text"
+            name="expirationDate"
+            value={formData.expirationDate}
+            onChange={handleChange}
+            placeholder="MM/YY"
+            className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
+            required
+          />
+          {errors.expirationDate && (
+            <p className="text-sm text-red-500">{errors.expirationDate}</p>
+          )}
+        </div>
 
-          {/* Expiration Date Input */}
-          <div className="mb-4">
-            <Input
-              type="text"
-              name="expirationDate"
-              value={formData.expirationDate}
-              onChange={handleChange}
-              placeholder="MM/YY"
-              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
-              required
-            />
-            {errors.expirationDate && (
-              <p className="text-sm text-red-500">{errors.expirationDate}</p>
-            )}
-          </div>
+        {/* CVV Input */}
+        <div className="mb-6">
+          <Input
+            type="text"
+            name="cvv"
+            value={formData.cvv}
+            onChange={handleChange}
+            placeholder="Enter CVV"
+            className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
+            required
+          />
+          {errors.cvv && <p className="text-sm text-red-500">{errors.cvv}</p>}
+        </div>
 
-          {/* CVV Input */}
-          <div className="mb-6">
-            <Input
-              type="text"
-              name="cvv"
-              value={formData.cvv}
-              onChange={handleChange}
-              placeholder="Enter CVV"
-              className="w-full rounded-md border border-[#444d56] bg-[#222b30] p-3 text-[#aabfc6] transition focus:ring-2 focus:ring-[#aabfc6] focus:outline-none"
-              required
-            />
-            {errors.cvv && (
-              <p className="text-sm text-red-500">{errors.cvv}</p>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full rounded-md bg-[#aabfc6] py-3 font-semibold text-[#11171a] transition hover:bg-[#8e9aaf]"
-          >
-            Submit Card Details
-          </button>
-        </form>
-      </div>
-    </div>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full rounded-md bg-[#aabfc6] py-3 font-semibold text-[#11171a] transition hover:bg-[#8e9aaf]"
+        >
+          Submit Card Details
+        </button>
+      </form>
+    </Card>
   );
 }
-
-

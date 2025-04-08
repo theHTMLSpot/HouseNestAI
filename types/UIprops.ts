@@ -20,11 +20,12 @@ export interface InputProps {
   autoComplete?: string;
   autoFocus?: boolean;
   readOnly?: boolean;
+  error?: string;
 }
 
 export interface CardProps {
   title: string;
-  description: string;
+  description?: string;
   titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   descriptionLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   titleClassName?: string;
@@ -32,6 +33,7 @@ export interface CardProps {
   imageUrl?: string;
   onClick?: () => void;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export interface TitleProps {
