@@ -3,7 +3,7 @@ package main
 import (
 	"druc/backend/tools"
 	"encoding/json"
-	"fmt"
+
 	"net/http"
 )
 
@@ -26,22 +26,8 @@ func GetComp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to process listing data", http.StatusInternalServerError)
 		return
 	}
-	weightBytes, err := json.Marshal(data.Weights)
 
-	if err != nil {
-		http.Error(w, "Failed to process weight data", http.StatusInternalServerError)
-		return
-	}
-	weights := make([]float64, len(weightBytes))
-
-	for i, byte_ := range weightBytes {
-		weights[i] = float64(byte_)
-	}
-
-	overallScore, err := tools.JsonToComp(idealBytes, listingBytes, weights)
-	fmt.Println(listingBytes)
-	fmt.Println(idealBytes)
-	fmt.Println(weights)
+	overallScore, err := tools.JsonToComp(idealBytes, listingBytes, data.Weights)
 	if err != nil {
 		http.Error(w, "Failed to compute overall score", http.StatusInternalServerError)
 		return
