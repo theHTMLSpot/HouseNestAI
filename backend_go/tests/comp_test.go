@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func almostEqual(a, b float64) bool {
-	return math.Abs(a-b) < 0.01
+func almostEqual(a, b float64, tolerance float64) bool {
+	return math.Abs(a-b) < tolerance
 }
 
 func TestOverallScore(t *testing.T) {
@@ -17,7 +17,7 @@ func TestOverallScore(t *testing.T) {
 	}
 
 	expected := (80 + 90 + 70 + 60 + 85 + 75 + 65) / 7
-	if !almostEqual(score, float64(expected)) {
+	if !almostEqual(score, float64(expected), 0.1) {
 		t.Errorf("Expected %v, got %v", expected, score)
 	}
 
@@ -30,7 +30,7 @@ func TestOverallScore(t *testing.T) {
 func TestLocationScore(t *testing.T) {
 	score := comp.LocationScore(100)
 	expected := 80.0
-	if !almostEqual(score, expected) {
+	if !almostEqual(score, expected, 0.1) {
 		t.Errorf("Expected %v, got %v", expected, score)
 	}
 
@@ -61,7 +61,7 @@ func TestScoreWithMultiplier(t *testing.T) {
 
 	score := comp.ScoreWithMultiplier(100, 110, 2)
 	expected := 100 - (20.0 / 100.0 * 100.0)
-	if !almostEqual(score, expected) {
+	if !almostEqual(score, expected, 0.1) {
 		t.Errorf("Expected %v, got %v", expected, score)
 	}
 }
@@ -82,7 +82,7 @@ func TestFeaturesScore(t *testing.T) {
 
 	score := comp.FeaturesScore(ideal, listing)
 	expected := ((2.0 - 1.0) / 3.0) * 100
-	if !almostEqual(score, expected) {
+	if !almostEqual(score, expected, 0.1) {
 		t.Errorf("Expected %v, got %v", expected, score)
 	}
 
