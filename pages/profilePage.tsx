@@ -3,8 +3,6 @@ import { UserProps } from "@/types/UserProps";
 import Link from "next/link";
 
 export default function ProfilePage() {
-  
-
   const fakeUserData: UserProps = {
     firstName: "John",
     lastName: "Doe",

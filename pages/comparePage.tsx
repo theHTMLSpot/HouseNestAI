@@ -19,7 +19,8 @@ export default function ComparePage() {
 
   const listing: Listing = {
     title: "Luxury Modern Villa with Pool",
-    description: "This stunning modern villa features a spacious open-concept living area, a beautiful swimming pool, and breathtaking panoramic views. It offers a fully equipped kitchen, smart home features, and eco-friendly design elements throughout the property.",
+    description:
+      "This stunning modern villa features a spacious open-concept living area, a beautiful swimming pool, and breathtaking panoramic views. It offers a fully equipped kitchen, smart home features, and eco-friendly design elements throughout the property.",
     price: 1250000,
     location: "Malta, St. Julians",
     yearBuilt: 1985,
@@ -28,9 +29,8 @@ export default function ComparePage() {
     propertyType: "Villa",
     bedrooms: 4,
     bathrooms: 3,
-    propertyFeatures: ["Swimming Pool", "Smart Home", "Eco-Friendly Design"]
+    propertyFeatures: ["Swimming Pool", "Smart Home", "Eco-Friendly Design"],
   };
-  
 
   // Form state for Ideal Home
   const [formData, setFormData] = useState<{
@@ -68,13 +68,12 @@ export default function ComparePage() {
   });
 
   // Suggestions for property features
-  
 
   // Handle input change for form fields
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -143,15 +142,15 @@ export default function ComparePage() {
 
   // Handle change for property features
   const handlePropertyFeaturesChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const { value } = e.target;
     setNewFeature(value);
 
     // Filter suggestions based on the input
     if (value.trim().length > 0) {
-      const filteredSuggestions = propertyFeaturesSuggestions.filter((feature) =>
-        feature.toLowerCase().includes(value.toLowerCase())
+      const filteredSuggestions = propertyFeaturesSuggestions.filter(
+        (feature) => feature.toLowerCase().includes(value.toLowerCase()),
       );
       setSuggestions(filteredSuggestions);
       setIsDropdownVisible(true);
@@ -185,13 +184,13 @@ export default function ComparePage() {
     setFormData((prev) => ({
       ...prev,
       propertyFeatures: prev.propertyFeatures.filter(
-        (item) => item !== feature
+        (item) => item !== feature,
       ),
     }));
   };
 
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex w-full justify-center">
       {/* Left Side: Form Inputs */}
       <div className="w-1/2 rounded-lg bg-[#222b30] p-8">
         <Title
@@ -207,7 +206,7 @@ export default function ComparePage() {
               name="propertyType"
               value={formData.propertyType}
               onChange={handleChange}
-              className="w-full rounded-lg border p-4 text-[#aabfc6] bg-[#444d56]"
+              className="w-full rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
             >
               <option value="" disabled>
                 Select Property Type
@@ -234,7 +233,7 @@ export default function ComparePage() {
               value={formData.price}
               onChange={handleChange}
               error={formErrors.price}
-              className="border-1 border-[#444d56] p-4 rounded-lg w-full"
+              className="w-full rounded-lg border-1 border-[#444d56] p-4"
             />
           </div>
 
@@ -247,7 +246,7 @@ export default function ComparePage() {
               value={formData.location}
               onChange={handleChange}
               error={formErrors.location}
-              className="border-1 border-[#444d56] p-4 rounded-lg w-full"
+              className="w-full rounded-lg border-1 border-[#444d56] p-4"
             />
           </div>
 
@@ -260,7 +259,7 @@ export default function ComparePage() {
               value={formData.bedrooms}
               onChange={handleChange}
               error={formErrors.bedrooms}
-              className="border-1 border-[#444d56] p-4 rounded-lg w-full"
+              className="w-full rounded-lg border-1 border-[#444d56] p-4"
             />
           </div>
 
@@ -273,7 +272,7 @@ export default function ComparePage() {
               value={formData.bathrooms}
               onChange={handleChange}
               error={formErrors.bathrooms}
-              className="border-1 border-[#444d56] p-4 rounded-lg w-full"
+              className="w-full rounded-lg border-1 border-[#444d56] p-4"
             />
           </div>
 
@@ -286,7 +285,7 @@ export default function ComparePage() {
               value={formData.squareFootage}
               onChange={handleChange}
               error={formErrors.squareFootage}
-              className="border-1 border-[#444d56] p-4 rounded-lg w-full"
+              className="w-full rounded-lg border-1 border-[#444d56] p-4"
             />
           </div>
 
@@ -299,7 +298,7 @@ export default function ComparePage() {
               value={formData.yearBuilt}
               onChange={handleChange}
               error={formErrors.yearBuilt}
-              className="border-1 border-[#444d56] p-4 rounded-lg w-full"
+              className="w-full rounded-lg border-1 border-[#444d56] p-4"
             />
           </div>
 
@@ -318,11 +317,11 @@ export default function ComparePage() {
 
             {/* Suggestions Dropdown */}
             {isDropdownVisible && suggestions.length > 0 && (
-              <div className="mt-2 rounded-lg border border-[#444d56] bg-[#222b30] max-h-40 overflow-y-auto">
+              <div className="mt-2 max-h-40 overflow-y-auto rounded-lg border border-[#444d56] bg-[#222b30]">
                 {suggestions.map((suggestion, index) => (
                   <div
                     key={index}
-                    className="p-2 text-[#aabfc6] cursor-pointer hover:bg-[#444d56]"
+                    className="cursor-pointer p-2 text-[#aabfc6] hover:bg-[#444d56]"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
@@ -333,11 +332,11 @@ export default function ComparePage() {
           </div>
 
           {/* Selected Features */}
-          <div className="flex flex-wrap gap-2 mt-4">
+          <div className="mt-4 flex flex-wrap gap-2">
             {formData.propertyFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="flex items-center space-x-2 bg-[#444d56] px-4 py-2 rounded-full"
+                className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
               >
                 <span className="text-[#aabfc6]">{feature}</span>
                 <button
@@ -374,41 +373,61 @@ export default function ComparePage() {
         </form>
       </div>
       {/* right side */}
-      <Card title={listing.title} description={listing.description || ""} imageUrl={listing.imageUrl || undefined} className="w-1/2 bg-[#222b30] rounded-lg overflow-hidden shadow-lg">
+      <Card
+        title={listing.title}
+        description={listing.description || ""}
+        imageUrl={listing.imageUrl || undefined}
+        className="w-1/2 overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
+      >
         {/* Card Content */}
         <div className="p-6">
-            {/* Title */}
-            <h3 className="text-2xl font-bold text-[#aabfc6]">{listing.title}</h3>
-            
-            {/* Description */}
-            <p className="mt-2 text-[#aabfc6] text-sm">{listing.description || "No description available."}</p>
+          {/* Title */}
+          <h3 className="text-2xl font-bold text-[#aabfc6]">{listing.title}</h3>
 
-            {/* Property Details */}
-            <div className="mt-4 space-y-2 text-sm text-[#aabfc6]">
-            <p><strong>Space:</strong> {listing.squareFootage} sq ft</p>
-            <p><strong>Location:</strong> {listing.location}</p>
-            <p><strong>Price:</strong> ${listing.price.toLocaleString()}</p>
-            <p><strong>Year Built:</strong> {listing.yearBuilt}</p>
-            <p><strong>Bedrooms:</strong> {listing.bedrooms}</p>
-            <p><strong>Bathrooms:</strong> {listing.bathrooms}</p>
+          {/* Description */}
+          <p className="mt-2 text-sm text-[#aabfc6]">
+            {listing.description || "No description available."}
+          </p>
+
+          {/* Property Details */}
+          <div className="mt-4 space-y-2 text-sm text-[#aabfc6]">
+            <p>
+              <strong>Space:</strong> {listing.squareFootage} sq ft
+            </p>
+            <p>
+              <strong>Location:</strong> {listing.location}
+            </p>
+            <p>
+              <strong>Price:</strong> ${listing.price.toLocaleString()}
+            </p>
+            <p>
+              <strong>Year Built:</strong> {listing.yearBuilt}
+            </p>
+            <p>
+              <strong>Bedrooms:</strong> {listing.bedrooms}
+            </p>
+            <p>
+              <strong>Bathrooms:</strong> {listing.bathrooms}
+            </p>
 
             {/* Property Features */}
             <div>
-                <strong>Property Features:</strong>
-                <ul className="mt-2 space-y-1">
+              <strong>Property Features:</strong>
+              <ul className="mt-2 space-y-1">
                 {listing.propertyFeatures.length > 0 ? (
-                    listing.propertyFeatures.map((feature, index) => (
-                    <li key={index} className="text-[#aabfc6]">{feature}</li>
-                    ))
+                  listing.propertyFeatures.map((feature, index) => (
+                    <li key={index} className="text-[#aabfc6]">
+                      {feature}
+                    </li>
+                  ))
                 ) : (
-                    <p>No features listed.</p>
+                  <p>No features listed.</p>
                 )}
-                </ul>
+              </ul>
             </div>
-            </div>
+          </div>
         </div>
-        </Card>
-
+      </Card>
     </div>
   );
 }

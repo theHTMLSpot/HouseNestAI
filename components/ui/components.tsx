@@ -45,7 +45,7 @@ const Input: React.FC<InputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`${className} ${error ? 'border-red-500' : 'border-[#444d56]'} p-4 rounded-md w-full`} // Apply red border if error
+        className={`${className} ${error ? "border-red-500" : "border-[#444d56]"} w-full rounded-md p-4`} // Apply red border if error
         disabled={disabled}
         required={required}
         maxLength={maxLength}
@@ -57,7 +57,7 @@ const Input: React.FC<InputProps> = ({
       />
       {/* Show error message */}
       {error && (
-        <span className="text-red-500 text-sm absolute right-2 bottom-1">
+        <span className="absolute right-2 bottom-1 text-sm text-red-500">
           {error}
         </span>
       )}

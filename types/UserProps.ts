@@ -1,15 +1,15 @@
 export type Listing = {
-    propertyType: string,
-    price: number,
-    location: string,
-    bedrooms: number,
-    bathrooms: number,
-    squareFootage: number,
-    yearBuilt: number,
-    propertyFeatures: Array<string>,
-    title: string,
-    description: string,
-    imageUrl: string
+  propertyType: string;
+  price: number;
+  location: string;
+  bedrooms: number;
+  bathrooms: number;
+  squareFootage: number;
+  yearBuilt: number;
+  propertyFeatures: Array<string>;
+  title: string;
+  description: string;
+  imageUrl: string;
 };
 
 export type UserProps = {
