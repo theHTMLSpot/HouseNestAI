@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Input, Card } from "@/components/ui/components";
+import Link from "next/link";
+import Image from "next/image";
 
 type SignupPageProps = {
   handleNext: () => void;
@@ -172,6 +174,42 @@ export default function SignupPage({ handleNext }: SignupPageProps) {
           Login
         </a>
       </p>
+
+      <div className="flex items-center my-6">
+        <div className="h-px flex-1 bg-[#2e3a40]"></div>
+        <span className="mx-3 text-[#6c7a80]">or</span>
+        <div className="h-px flex-1 bg-[#2e3a40]"></div>
+      </div>
+
+      <div className="space-y-3">
+        <Link
+          href="http://localhost:8000/auth/google"
+          className="w-full flex items-center justify-center gap-2 rounded-md border border-[#444d56] bg-[#ffffff] py-3 font-semibold text-[#11171a] transition hover:bg-[#f0f0f0]"
+        >
+          <Image
+            src="/google.svg"
+            alt="Google"
+            height={20}
+            width={20}
+            className="h-5 w-5"
+          />
+          Continue with Google
+        </Link>
+
+        <Link
+          href="http://localhost:8000/auth/github"
+          className="w-full flex items-center justify-center gap-2 rounded-md border border-[#444d56] bg-[#11171a] py-3 font-semibold text-[#aabfc6] transition hover:bg-[#1f2a30]"
+        >
+          <Image
+            src="/github.svg"
+            alt="GitHub"
+            height={20}
+            width={20}
+            className="h-5 w-5"
+          />
+          Continue with GitHub
+        </Link>
+      </div>
     </Card>
   );
 }
