@@ -15,11 +15,11 @@ func ValidateLoginInput(name, email, password string) error {
 	email = strings.TrimSpace(email)
 	password = strings.TrimSpace(password)
 
-	if name == "" || email == "" || password == "" {
+	if email == "" || password == "" {
 		return errors.New("all fields are required")
 	}
 
-	if !validName.MatchString(name) {
+	if !validName.MatchString(name) && name != "" {
 		return errors.New("name must be 2-32 characters, letters, numbers, _, - only")
 	}
 

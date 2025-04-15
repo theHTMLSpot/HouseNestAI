@@ -30,15 +30,57 @@ type User struct {
 	JWT            string `bson:"jwt"`
 }
 
+func LogoutJWT(jwt string) error {
+	collection := db.MongoClient.Database("Users").Collection("Users")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Clear the JWT by updating the user's JWT field to an empty string
+	update := bson.M{
+		"$set": bson.M{
+			"jwt": "",
+		},
+	}
+
+	result := collection.FindOneAndUpdate(ctx, bson.M{"jwt": jwt}, update)
+	if result.Err() != nil {
+		log.Println("User not found or update failed:", result.Err())
+		return errors.New("account not found")
+	}
+
+	return nil
+}
+
+func GetAccountFromJWT(jwt string) (*User, error) {
+	collection := db.MongoClient.Database("Users").Collection("Users")
+
+	// Set a timeout for the database operation
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var user User
+	// Query to find the user by JWT
+	err := collection.FindOne(ctx, bson.M{"jwt": jwt}).Decode(&user)
+	if err != nil {
+		log.Println("User not found:", err)
+		return nil, errors.New("account not found")
+	}
+
+	// Return the user object and nil error if found
+	return &user, nil
+}
+
 // 🔐 GetAccount fetches the user and validates their password
 func GetAccount(email, inputPassword string) (string, error) {
+
 	err := utils.ValidateLoginInput("", email, inputPassword)
 	if err != nil {
 		log.Println("Invalid login input:", err)
 		return "", err
 	}
 
-	collection := db.MongoClient.Database(os.Getenv("MONGO_DB")).Collection("users")
+	collection := db.MongoClient.Database("Users").Collection("Users")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -86,7 +128,7 @@ func NewAccount(name, email, password string) (string, string, error) {
 		return "", "", err
 	}
 
-	collection := db.MongoClient.Database(os.Getenv("MONGO_DB")).Collection("users")
+	collection := db.MongoClient.Database("Users").Collection("Users")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
