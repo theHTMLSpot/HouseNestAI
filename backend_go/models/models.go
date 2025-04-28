@@ -1,8 +1,0 @@
-package models
-
-type User struct {
-	Name     string `bson:"name"`
-	Email    string `bson:"email"`
-	Password string `bson:"password"`
-	JWT      string `bson:"jwt"`
-}
