@@ -6,16 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function LoginPage() {
-	window.addEventListener("beforeunload", (event) => {
-		const isDirty = true; // If there are unsaved changes
-		if (isDirty) {
-			const message =
-				"Are you sure you want to leave? Your progress will be lost.";
-			event.returnValue = message; // Standard for most browsers
-			return message; // For some older browsers
-		}
-	});
-
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",

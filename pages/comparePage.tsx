@@ -3,19 +3,47 @@
 import { useState } from "react";
 import { Title, Input } from "@/components/ui/components";
 import { propertyFeatures as propertyFeaturesSuggestions } from "@/utils/propertyFeatues";
-import { Card } from "@/components/ui/components";
+import { Card, Button } from "@/components/ui/components";
 import { Listing } from "@/types/UserProps";
 
 export default function ComparePage() {
-	window.addEventListener("beforeunload", (event) => {
-		const isDirty = true; // If there are unsaved changes
-		if (isDirty) {
-			const message =
-				"Are you sure you want to leave? Your progress will be lost.";
-			event.returnValue = message; // Standard for most browsers
-			return message; // For some older browsers
+	const [hasLink, setHasLink] = useState(false);
+	const [propertyUrl, setPropertyUrl] = useState("");
+	const [propertyUrlError, setPropertyUrlError] = useState("");
+
+	const onInputFinished = () => {
+		try {
+			new URL(propertyUrl);
+			setPropertyUrlError("");
+			setHasLink(true);
+		} catch {
+			setPropertyUrlError("Please enter a valid URL");
+			setHasLink(false);
+			return;
 		}
-	});
+	};
+
+	const handlePropertyUrlInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		console.log("handlePropertyUrlInput called with:", value);
+
+		if (value.includes("\n")) onInputFinished();
+
+		try {
+			// Basic URL validation
+			setPropertyUrl(value);
+			setPropertyUrlError("");
+			console.log("URL accepted:", value);
+		} catch {
+			setPropertyUrlError("Please enter a valid URL");
+			console.warn("Invalid URL format");
+		}
+		if (!value.trim()) {
+			setPropertyUrlError("Valid URL is required");
+			console.warn("Empty input – Valid URL is required");
+			return;
+		}
+	};
 
 	const listing: Listing = {
 		title: "Luxury Modern Villa with Pool",
@@ -190,244 +218,274 @@ export default function ComparePage() {
 	};
 
 	return (
-		<div className="flex w-full justify-center">
-			{/* Left Side: Form Inputs */}
-			<div className="w-1/2 rounded-lg bg-[#222b30] p-8">
-				<Title
-					text="Your Ideal Home"
-					level={1}
-					className="mb-6 text-4xl font-bold text-[#aabfc6]"
-				/>
+		<>
+			<div className="flex w-full justify-center">
+				{/* Left Side: Form Inputs */}
+				<div className="w-1/2 rounded-lg bg-[#222b30] p-8">
+					<Title
+						text="Your Ideal Home"
+						level={1}
+						className="mb-6 text-4xl font-bold text-[#aabfc6]"
+					/>
 
-				<form onSubmit={handleSubmit} className="space-y-6">
-					{/* Property Type (Dropdown) */}
-					<div>
-						<select
-							name="propertyType"
-							value={formData.propertyType}
-							onChange={handleChange}
-							className="w-full rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
-						>
-							<option value="" disabled>
-								Select Property Type
-							</option>
-							<option value="House">House</option>
-							<option value="Apartment">Apartment</option>
-							<option value="Condo">Condo</option>
-							<option value="Villa">Villa</option>
-							<option value="Townhouse">Townhouse</option>
-						</select>
-						{formErrors.propertyType && (
-							<span className="text-sm text-red-500">
-								{formErrors.propertyType}
-							</span>
-						)}
-					</div>
-
-					{/* Price */}
-					<div>
-						<Input
-							placeholder="Price"
-							name="price"
-							type="text"
-							value={formData.price}
-							onChange={handleChange}
-							error={formErrors.price}
-							className="w-full rounded-lg border-1 border-[#444d56] p-4"
-						/>
-					</div>
-
-					{/* Location */}
-					<div>
-						<Input
-							placeholder="Location"
-							name="location"
-							type="text"
-							value={formData.location}
-							onChange={handleChange}
-							error={formErrors.location}
-							className="w-full rounded-lg border-1 border-[#444d56] p-4"
-						/>
-					</div>
-
-					{/* Bedrooms */}
-					<div>
-						<Input
-							placeholder="Bedrooms"
-							name="bedrooms"
-							type="number"
-							value={formData.bedrooms}
-							onChange={handleChange}
-							error={formErrors.bedrooms}
-							className="w-full rounded-lg border-1 border-[#444d56] p-4"
-						/>
-					</div>
-
-					{/* Bathrooms */}
-					<div>
-						<Input
-							placeholder="Bathrooms"
-							name="bathrooms"
-							type="number"
-							value={formData.bathrooms}
-							onChange={handleChange}
-							error={formErrors.bathrooms}
-							className="w-full rounded-lg border-1 border-[#444d56] p-4"
-						/>
-					</div>
-
-					{/* Square Footage */}
-					<div>
-						<Input
-							placeholder="Square Footage"
-							name="squareFootage"
-							type="number"
-							value={formData.squareFootage}
-							onChange={handleChange}
-							error={formErrors.squareFootage}
-							className="w-full rounded-lg border-1 border-[#444d56] p-4"
-						/>
-					</div>
-
-					{/* Year Built */}
-					<div>
-						<Input
-							placeholder="Year Built"
-							name="yearBuilt"
-							type="number"
-							value={formData.yearBuilt}
-							onChange={handleChange}
-							error={formErrors.yearBuilt}
-							className="w-full rounded-lg border-1 border-[#444d56] p-4"
-						/>
-					</div>
-
-					{/* Property Features */}
-					<div>
-						<textarea
-							name="propertyFeatures"
-							placeholder="Add property features"
-							value={newFeature}
-							onChange={handlePropertyFeaturesChange}
-							className={`h-32 w-full rounded-lg border p-4 text-[#aabfc6] ${isSpaceInvalid ? "border-red-500" : "border-[#444d56]"}`}
-						/>
-						{isSpaceInvalid && (
-							<span className="text-sm text-red-500">Space is not allowed</span>
-						)}
-
-						{/* Suggestions Dropdown */}
-						{isDropdownVisible && suggestions.length > 0 && (
-							<div className="mt-2 max-h-40 overflow-y-auto rounded-lg border border-[#444d56] bg-[#222b30]">
-								{suggestions.map((suggestion, index) => (
-									<div
-										key={index}
-										className="cursor-pointer p-2 text-[#aabfc6] hover:bg-[#444d56]"
-										onClick={() => handleSuggestionClick(suggestion)}
-									>
-										{suggestion}
-									</div>
-								))}
-							</div>
-						)}
-					</div>
-
-					{/* Selected Features */}
-					<div className="mt-4 flex flex-wrap gap-2">
-						{formData.propertyFeatures.map((feature, index) => (
-							<div
-								key={index}
-								className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
+					<form onSubmit={handleSubmit} className="space-y-6">
+						{/* Property Type (Dropdown) */}
+						<div>
+							<select
+								name="propertyType"
+								value={formData.propertyType}
+								onChange={handleChange}
+								className="w-full rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
 							>
-								<span className="text-[#aabfc6]">{feature}</span>
-								<button
-									type="button"
-									className="text-red-500"
-									onClick={() => handleRemoveFeature(feature)}
-								>
-									✖
-								</button>
-							</div>
-						))}
-					</div>
+								<option value="" disabled>
+									Select Property Type
+								</option>
+								<option value="House">House</option>
+								<option value="Apartment">Apartment</option>
+								<option value="Condo">Condo</option>
+								<option value="Villa">Villa</option>
+								<option value="Townhouse">Townhouse</option>
+							</select>
+							{formErrors.propertyType && (
+								<span className="text-sm text-red-500">
+									{formErrors.propertyType}
+								</span>
+							)}
+						</div>
 
-					{/* Description */}
-					<div>
-						<textarea
-							placeholder="Description"
-							name="description"
-							value={formData.description}
-							onChange={handleChange}
-							className="w-full rounded-lg border p-4 text-[#aabfc6]"
-						/>
-					</div>
+						{/* Price */}
+						<div>
+							<Input
+								placeholder="Price"
+								name="price"
+								type="text"
+								value={formData.price}
+								onChange={handleChange}
+								error={formErrors.price}
+								className="w-full rounded-lg border-1 border-[#444d56] p-4"
+							/>
+						</div>
 
-					{/* Submit Button */}
-					<div className="flex justify-center">
-						<button
-							type="submit"
-							className="mt-4 rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors duration-300 hover:bg-blue-700"
-						>
-							Submit Listing
-						</button>
-					</div>
-				</form>
-			</div>
-			{/* right side */}
-			<Card
-				title={listing.title}
-				description={listing.description || ""}
-				imageUrl={listing.imageUrl || ""}
-				className="w-1/2 overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
-			>
-				{/* Card Content */}
-				<div className="p-6">
-					{/* Title */}
-					<h3 className="text-2xl font-bold text-[#aabfc6]">{listing.title}</h3>
+						{/* Location */}
+						<div>
+							<Input
+								placeholder="Location"
+								name="location"
+								type="text"
+								value={formData.location}
+								onChange={handleChange}
+								error={formErrors.location}
+								className="w-full rounded-lg border-1 border-[#444d56] p-4"
+							/>
+						</div>
 
-					{/* Description */}
-					<p className="mt-2 text-sm text-[#aabfc6]">
-						{listing.description || "No description available."}
-					</p>
+						{/* Bedrooms */}
+						<div>
+							<Input
+								placeholder="Bedrooms"
+								name="bedrooms"
+								type="number"
+								value={formData.bedrooms}
+								onChange={handleChange}
+								error={formErrors.bedrooms}
+								className="w-full rounded-lg border-1 border-[#444d56] p-4"
+							/>
+						</div>
 
-					{/* Property Details */}
-					<div className="mt-4 space-y-2 text-sm text-[#aabfc6]">
-						<p>
-							<strong>Space:</strong> {listing.squareFootage} sq ft
-						</p>
-						<p>
-							<strong>Location:</strong> {listing.location}
-						</p>
-						<p>
-							<strong>Price:</strong> ${listing.price.toLocaleString()}
-						</p>
-						<p>
-							<strong>Year Built:</strong> {listing.yearBuilt}
-						</p>
-						<p>
-							<strong>Bedrooms:</strong> {listing.bedrooms}
-						</p>
-						<p>
-							<strong>Bathrooms:</strong> {listing.bathrooms}
-						</p>
+						{/* Bathrooms */}
+						<div>
+							<Input
+								placeholder="Bathrooms"
+								name="bathrooms"
+								type="number"
+								value={formData.bathrooms}
+								onChange={handleChange}
+								error={formErrors.bathrooms}
+								className="w-full rounded-lg border-1 border-[#444d56] p-4"
+							/>
+						</div>
+
+						{/* Square Footage */}
+						<div>
+							<Input
+								placeholder="Square Footage"
+								name="squareFootage"
+								type="number"
+								value={formData.squareFootage}
+								onChange={handleChange}
+								error={formErrors.squareFootage}
+								className="w-full rounded-lg border-1 border-[#444d56] p-4"
+							/>
+						</div>
+
+						{/* Year Built */}
+						<div>
+							<Input
+								placeholder="Year Built"
+								name="yearBuilt"
+								type="number"
+								value={formData.yearBuilt}
+								onChange={handleChange}
+								error={formErrors.yearBuilt}
+								className="w-full rounded-lg border-1 border-[#444d56] p-4"
+							/>
+						</div>
 
 						{/* Property Features */}
 						<div>
-							<strong>Property Features:</strong>
-							<ul className="mt-2 space-y-1">
-								{listing.propertyFeatures.length > 0 ? (
-									listing.propertyFeatures.map((feature, index) => (
-										<li key={index} className="text-[#aabfc6]">
-											{feature}
-										</li>
-									))
-								) : (
-									<p>No features listed.</p>
-								)}
-							</ul>
+							<textarea
+								name="propertyFeatures"
+								placeholder="Add property features"
+								value={newFeature}
+								onChange={handlePropertyFeaturesChange}
+								className={`h-32 w-full rounded-lg border p-4 text-[#aabfc6] ${isSpaceInvalid ? "border-red-500" : "border-[#444d56]"}`}
+							/>
+							{isSpaceInvalid && (
+								<span className="text-sm text-red-500">
+									Space is not allowed
+								</span>
+							)}
+
+							{/* Suggestions Dropdown */}
+							{isDropdownVisible && suggestions.length > 0 && (
+								<div className="mt-2 max-h-40 overflow-y-auto rounded-lg border border-[#444d56] bg-[#222b30]">
+									{suggestions.map((suggestion, index) => (
+										<div
+											key={index}
+											className="cursor-pointer p-2 text-[#aabfc6] hover:bg-[#444d56]"
+											onClick={() => handleSuggestionClick(suggestion)}
+										>
+											{suggestion}
+										</div>
+									))}
+								</div>
+							)}
 						</div>
-					</div>
+
+						{/* Selected Features */}
+						<div className="mt-4 flex flex-wrap gap-2">
+							{formData.propertyFeatures.map((feature, index) => (
+								<div
+									key={index}
+									className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
+								>
+									<span className="text-[#aabfc6]">{feature}</span>
+									<button
+										type="button"
+										className="text-red-500"
+										onClick={() => handleRemoveFeature(feature)}
+									>
+										✖
+									</button>
+								</div>
+							))}
+						</div>
+
+						{/* Description */}
+						<div>
+							<textarea
+								placeholder="Description"
+								name="description"
+								value={formData.description}
+								onChange={handleChange}
+								className="w-full rounded-lg border p-4 text-[#aabfc6]"
+							/>
+						</div>
+
+						{/* Submit Button */}
+						<div className="flex justify-center">
+							<button
+								type="submit"
+								className="mt-4 rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors duration-300 hover:bg-blue-700"
+							>
+								Submit Listing
+							</button>
+						</div>
+					</form>
 				</div>
-			</Card>
-		</div>
+				{/* right side */}
+				{hasLink ? (
+					<Card
+						title={listing.title}
+						description={listing.description || ""}
+						imageUrl={listing.imageUrl || ""}
+						className="w-1/2 overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
+					>
+						{/* Card Content */}
+						<div className="p-6">
+							{/* Title */}
+							<h3 className="text-2xl font-bold text-[#aabfc6]">
+								{listing.title}
+							</h3>
+
+							{/* Description */}
+							<p className="mt-2 text-sm text-[#aabfc6]">
+								{listing.description || "No description available."}
+							</p>
+
+							{/* Property Details */}
+							<div className="mt-4 space-y-2 text-sm text-[#aabfc6]">
+								<p>
+									<strong>Space:</strong> {listing.squareFootage} sq ft
+								</p>
+								<p>
+									<strong>Location:</strong> {listing.location}
+								</p>
+								<p>
+									<strong>Price:</strong> ${listing.price.toLocaleString()}
+								</p>
+								<p>
+									<strong>Year Built:</strong> {listing.yearBuilt}
+								</p>
+								<p>
+									<strong>Bedrooms:</strong> {listing.bedrooms}
+								</p>
+								<p>
+									<strong>Bathrooms:</strong> {listing.bathrooms}
+								</p>
+
+								{/* Property Features */}
+								<div>
+									<strong>Property Features:</strong>
+									<ul className="mt-2 space-y-1">
+										{listing.propertyFeatures.length > 0 ? (
+											listing.propertyFeatures.map((feature, index) => (
+												<li key={index} className="text-[#aabfc6]">
+													{feature}
+												</li>
+											))
+										) : (
+											<p>No features listed.</p>
+										)}
+									</ul>
+								</div>
+							</div>
+						</div>
+					</Card>
+				) : (
+					<div className="flex w-1/2 flex-col items-center justify-center overflow-hidden rounded-lg bg-[#222b30] shadow-lg">
+						<label className="mb-5 text-[#aabfc6]">Enter a URL</label>
+						<input
+							className="mt-2 rounded border border-[#444d56] bg-[#222b30] p-2 text-white"
+							placeholder="Enter a URL"
+							type="text"
+							name="url"
+							value={propertyUrl}
+							onChange={(e) => handlePropertyUrlInput(e)}
+						/>
+
+						{propertyUrlError && (
+							<p className="mt-1 text-sm text-red-500">{propertyUrlError}</p>
+						)}
+
+						<Button
+							label="Submit"
+							onClick={() => onInputFinished()}
+							className="m-5 rounded bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors duration-300 hover:bg-blue-700"
+						/>
+					</div>
+				)}
+			</div>
+		</>
 	);
 }
