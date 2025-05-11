@@ -10,9 +10,6 @@ type SignupPageProps = {
 };
 
 export default function SignupPage({ handleNext }: SignupPageProps) {
-	
-		
-
 	const [formData, setFormData] = useState({
 		firstName: "",
 		lastName: "",
@@ -168,7 +165,7 @@ export default function SignupPage({ handleNext }: SignupPageProps) {
 				</a>
 			</p>
 
-			<div className="my-6 flex items-center">
+			<div className="my-6 flex w-[100%] items-center justify-center">
 				<div className="h-px flex-1 bg-[#2e3a40]"></div>
 				<span className="mx-3 text-[#6c7a80]">or</span>
 				<div className="h-px flex-1 bg-[#2e3a40]"></div>
@@ -177,7 +174,7 @@ export default function SignupPage({ handleNext }: SignupPageProps) {
 			<div className="space-y-3">
 				<Link
 					href="http://localhost:8000/auth/google"
-					className="flex w-full items-center justify-center gap-2 rounded-md border border-[#444d56] bg-[#ffffff] py-3 font-semibold text-[#11171a] transition hover:bg-[#f0f0f0]"
+					className="flex w-full items-center justify-center gap-2 rounded-md border border-[#444d56] bg-[#ffffff] p-3 font-semibold text-[#11171a] transition hover:bg-[#f0f0f0]"
 				>
 					<Image
 						src="/google.svg"
@@ -191,7 +188,7 @@ export default function SignupPage({ handleNext }: SignupPageProps) {
 
 				<Link
 					href="http://localhost:8000/auth/github"
-					className="flex w-full items-center justify-center gap-2 rounded-md border border-[#444d56] bg-[#11171a] py-3 font-semibold text-[#aabfc6] transition hover:bg-[#1f2a30]"
+					className="flex w-full items-center justify-center gap-2 rounded-md border border-[#444d56] bg-[#11171a] p-3 font-semibold text-[#aabfc6] transition hover:bg-[#1f2a30]"
 				>
 					<Image
 						src="/github.svg"
