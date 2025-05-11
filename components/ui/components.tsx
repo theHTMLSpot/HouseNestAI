@@ -110,6 +110,7 @@ const Card: React.FC<CardProps> = ({
 	descriptionClassName,
 	imageUrl,
 	onClick,
+	style,
 	className,
 	children,
 }) => {
@@ -117,6 +118,7 @@ const Card: React.FC<CardProps> = ({
 		<div
 			className={`flex flex-col items-center justify-center ${className}`}
 			onClick={onClick}
+			style={style}
 		>
 			{imageUrl && (
 				<Image src={imageUrl} alt={title} width={150} height={150} />

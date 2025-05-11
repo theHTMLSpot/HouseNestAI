@@ -32,6 +32,7 @@ export interface CardProps {
 	descriptionClassName?: string;
 	imageUrl?: string;
 	onClick?: () => void;
+	style?: React.CSSProperties;
 	className?: string;
 	children?: React.ReactNode;
 }

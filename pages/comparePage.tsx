@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Title, Input } from "@/components/ui/components";
 import { propertyFeatures as propertyFeaturesSuggestions } from "@/utils/propertyFeatues";
 import { Card, Button } from "@/components/ui/components";
@@ -10,6 +10,66 @@ export default function ComparePage() {
 	const [hasLink, setHasLink] = useState(false);
 	const [propertyUrl, setPropertyUrl] = useState("");
 	const [propertyUrlError, setPropertyUrlError] = useState("");
+
+	const [wLeft, setWLeft] = useState<number>(50);
+
+	const [scaling, setScaling] = useState<boolean>(false);
+
+	const [mouseX, setMouseX] = useState(0);
+
+	// Track mouseX globally
+	useEffect(() => {
+		const handleMouseMove = (event: MouseEvent) => {
+			setMouseX(event.clientX);
+		};
+
+		window.addEventListener("mousemove", handleMouseMove);
+		return () => window.removeEventListener("mousemove", handleMouseMove);
+	}, []);
+
+	const initialMouseXRef = useRef<number | null>(null);
+
+	// Handle scaling logic
+	useEffect(() => {
+		let animationFrameId: number;
+
+		const update = () => {
+			if (scaling && initialMouseXRef.current !== null) {
+				const deltaX = mouseX - initialMouseXRef.current;
+
+				setWLeft((prev) => {
+					const newWidth = prev + deltaX * 0.1; // tweak sensitivity
+					if (newWidth > 35 && newWidth < 75)
+						return Math.min(100, Math.max(0, newWidth));
+					return prev;
+				});
+				initialMouseXRef.current = mouseX;
+			}
+			animationFrameId = requestAnimationFrame(update);
+		};
+
+		if (scaling) {
+			animationFrameId = requestAnimationFrame(update);
+		}
+
+		return () => cancelAnimationFrame(animationFrameId);
+	}, [scaling, mouseX]);
+
+	// Start scaling
+	const handleMouseDown = () => {
+		setScaling(true);
+		initialMouseXRef.current = mouseX;
+	};
+
+	const handleMouseUp = () => {
+		setScaling(false);
+		initialMouseXRef.current = null;
+	};
+
+	useEffect(() => {
+		window.addEventListener("mouseup", handleMouseUp);
+		return () => window.removeEventListener("mouseup", handleMouseUp);
+	}, []);
 
 	const onInputFinished = () => {
 		try {
@@ -221,7 +281,10 @@ export default function ComparePage() {
 		<>
 			<div className="flex w-full justify-center">
 				{/* Left Side: Form Inputs */}
-				<div className="w-1/2 rounded-lg bg-[#222b30] p-8">
+				<div
+					className="bg-[#222b30] p-8"
+					style={{ width: `calc(${wLeft / 100} * 100vw)` }}
+				>
 					<Title
 						text="Your Ideal Home"
 						level={1}
@@ -403,6 +466,16 @@ export default function ComparePage() {
 						</div>
 					</form>
 				</div>
+
+				<div
+					className="h-screen w-[2px] cursor-ew-resize bg-gray-50"
+					onMouseDown={() => {
+						handleMouseDown();
+					}}
+					onMouseUp={() => {
+						handleMouseUp();
+					}}
+				/>
 				{/* right side */}
 				{hasLink ? (
 					<Card
@@ -410,6 +483,7 @@ export default function ComparePage() {
 						description={listing.description || ""}
 						imageUrl={listing.imageUrl || ""}
 						className="w-1/2 overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
+						style={{ width: `calc(${1 - wLeft / 100} * 100vw)` }}
 					>
 						{/* Card Content */}
 						<div className="p-6">
@@ -463,9 +537,12 @@ export default function ComparePage() {
 						</div>
 					</Card>
 				) : (
-					<div className="flex w-1/2 flex-col items-center justify-center overflow-hidden rounded-lg bg-[#222b30] shadow-lg">
+					<div
+						className="flex flex-col items-center justify-center overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
+						style={{ width: `calc(${1 - wLeft / 100} * 100vw)` }}
+					>
 						<label className="mb-5 text-[#aabfc6]">Enter a URL</label>
-						<input
+						<Input
 							className="mt-2 rounded border border-[#444d56] bg-[#222b30] p-2 text-white"
 							placeholder="Enter a URL"
 							type="text"
