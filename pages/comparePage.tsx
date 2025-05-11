@@ -279,10 +279,10 @@ export default function ComparePage() {
 
 	return (
 		<>
-			<div className="flex w-full justify-center">
+			<div className="flex h-[90vh] justify-center">
 				{/* Left Side: Form Inputs */}
 				<div
-					className="bg-[#222b30] p-8"
+					className="h-[90vh] overflow-x-scroll bg-[#222b30] p-8"
 					style={{ width: `calc(${wLeft / 100} * 100vw)` }}
 				>
 					<Title
@@ -468,7 +468,8 @@ export default function ComparePage() {
 				</div>
 
 				<div
-					className="h-screen w-[2px] cursor-ew-resize bg-gray-50"
+					className="w-[2px] cursor-ew-resize bg-gray-50"
+					style={{ height: "100%" }}
 					onMouseDown={() => {
 						handleMouseDown();
 					}}
