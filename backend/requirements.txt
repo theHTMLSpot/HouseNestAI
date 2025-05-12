@@ -1,9 +1,0 @@
-fastapi
-pydantic
-uvicorn
-tensorflow
-numpy
-pyJWT
-opencv-python
-matplotlib
-pandas
