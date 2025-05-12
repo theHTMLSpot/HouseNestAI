@@ -38,7 +38,7 @@ const Input: React.FC<InputProps> = ({
 	error, // Destructure error prop
 }) => {
 	return (
-		<div className="relative">
+		<div>
 			<input
 				type={type}
 				name={name}
@@ -56,11 +56,7 @@ const Input: React.FC<InputProps> = ({
 				readOnly={readOnly}
 			/>
 			{/* Show error message */}
-			{error && (
-				<span className="absolute right-2 bottom-1 text-sm text-red-500">
-					{error}
-				</span>
-			)}
+			{error && <span className="m-1 text-sm text-red-500">{error}</span>}
 		</div>
 	);
 };

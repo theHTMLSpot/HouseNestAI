@@ -7,9 +7,9 @@ export type Listing = {
 	squareFootage: number;
 	yearBuilt: number;
 	propertyFeatures: Array<string>;
-	title: string;
+	title?: string;
 	description: string;
-	imageUrl: string;
+	imageUrl?: string;
 };
 
 export type UserProps = {

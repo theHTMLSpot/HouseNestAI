@@ -23,7 +23,7 @@ export default function Navbar() {
 		router.push("/signup");
 	};
 
-	const signedIn = false; //! Replace with actual authentication logic
+	const signedIn = true; //! Replace with actual authentication logic
 
 	return (
 		<div className="relative flex w-full items-center justify-between border-b-2 border-b-[#4d7298] bg-[#2c3438] p-4 text-[#aabfc6]">
