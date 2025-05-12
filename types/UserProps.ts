@@ -8,7 +8,7 @@ export type Listing = {
 	yearBuilt: number;
 	propertyFeatures: Array<string>;
 	title?: string;
-	description: string;
+	description?: string;
 	imageUrl?: string;
 };
 

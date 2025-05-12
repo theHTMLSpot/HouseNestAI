@@ -127,12 +127,12 @@ export default function CompareForm({
 	// Form state for Ideal Home
 	const [formData, setFormData] = useState<Listing>({
 		propertyType: "",
-		price: 0,
+		price: NaN,
 		location: "",
-		bedrooms: 0,
-		bathrooms: 0,
-		squareFootage: 0,
-		yearBuilt: 0,
+		bedrooms: NaN,
+		bathrooms: NaN,
+		squareFootage: NaN,
+		yearBuilt: NaN,
 		propertyFeatures: [],
 		description: "",
 	});
@@ -149,6 +149,30 @@ export default function CompareForm({
 		description: "",
 	});
 
+	const [weights, setWeights] = useState({
+		propertyTypeWeight: "",
+		priceWeight: "",
+		locationWeight: "",
+		bedroomsWeight: "",
+		bathroomsWeight: "",
+		squareFootageWeight: "",
+		yearBuiltWeight: "",
+		propertyFeaturesWeight: "",
+		descriptionWeight: "",
+	});
+
+	const [weightErrors, setWeightErrors] = useState({
+		propertyTypeWeight: "",
+		priceWeight: "",
+		locationWeight: "",
+		bedroomsWeight: "",
+		bathroomsWeight: "",
+		squareFootageWeight: "",
+		yearBuiltWeight: "",
+		propertyFeaturesWeight: "",
+		descriptionWeight: "",
+	});
+
 	// Suggestions for property features
 
 	// Handle input change for form fields
@@ -160,7 +184,8 @@ export default function CompareForm({
 		if (
 			["price", "bedrooms", "bathrooms", "squareFootage", "yearBuilt"].includes(
 				name,
-			)
+			) ||
+			name.includes("Weight")
 		) {
 			const numValue =
 				typeof value === "string" ? parseFloat(value) : Number(value);
@@ -176,7 +201,7 @@ export default function CompareForm({
 		}
 
 		if (
-			["description", "propertyType", "location"].includes(name) &&
+			["propertyType", "location"].includes(name) &&
 			(value === "" || value === null)
 		) {
 			return `${capitalize(name)} is required.`;
@@ -209,9 +234,9 @@ export default function CompareForm({
 	};
 
 	// ✅ Full form validation on submit
-	const validateForm = () => {
+	const validateForm = (data: { [key: string]: string | number }) => {
 		const errors: { [key: string]: string } = {};
-		Object.entries(formData).forEach(([key, value]) => {
+		Object.entries(data).forEach(([key, value]) => {
 			const error = validateField(key, value);
 			if (error) errors[key] = error;
 		});
@@ -221,16 +246,24 @@ export default function CompareForm({
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const errors = validateForm();
-		setFormErrors((prev) => ({
+		const formErrors_ = validateForm(
+			formData as unknown as { [key: string]: string | number },
+		);
+		const weightErrors_ = validateForm(
+			weights as { [key: string]: string | number },
+		);
+
+		setWeightErrors((prev) => ({
 			...prev,
-			...errors,
+			...weightErrors_,
 		}));
 
-		const hasErrors = Object.values(errors).some((err) => err !== "");
+		const hasErrors =
+			Object.values(formErrors_).some((err) => err !== "") &&
+			Object.values(weightErrors).some((err) => err !== "");
 
 		if (hasErrors) {
-			const firstError = Object.values(errors).find((err) => err !== "");
+			const firstError = Object.values(formErrors_).find((err) => err !== "");
 			alert(firstError); // optional: focus the field instead
 			return;
 		}
@@ -239,12 +272,12 @@ export default function CompareForm({
 
 		setFormData({
 			propertyType: "",
-			price: 0,
+			price: NaN,
 			location: "",
-			bedrooms: 0,
-			bathrooms: 0,
-			squareFootage: 0,
-			yearBuilt: 0,
+			bedrooms: NaN,
+			bathrooms: NaN,
+			squareFootage: NaN,
+			yearBuilt: NaN,
 			propertyFeatures: [],
 			description: "",
 		});
@@ -306,6 +339,30 @@ export default function CompareForm({
 		}));
 	};
 
+	const HandleWeights = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+
+		// Always update the raw input
+		setWeights((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+
+		// Validation on-the-fly (optional)
+		const parsed = parseFloat(value);
+		if (value !== "" && (isNaN(parsed) || parsed < 0.1 || parsed > 10)) {
+			setWeightErrors((prev) => ({
+				...prev,
+				[name]: "Weight must be between 0.1 and 10",
+			}));
+		} else {
+			setWeightErrors((prev) => ({
+				...prev,
+				[name]: "",
+			}));
+		}
+	};
+
 	return (
 		<>
 			<div className="flex h-[90vh] justify-center">
@@ -323,6 +380,24 @@ export default function CompareForm({
 					<form onSubmit={handleSubmit} className="space-y-6">
 						{/* Property Type (Dropdown) */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="Proerty Type"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Property Type
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={weights.propertyTypeWeight}
+									placeholder="Weight"
+									onChange={(e) => {
+										HandleWeights(e);
+									}}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
 							<select
 								name="propertyType"
 								value={formData.propertyType}
@@ -347,11 +422,34 @@ export default function CompareForm({
 
 						{/* Price */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="price"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Price
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={
+										Number.isNaN(weights.priceWeight)
+											? ""
+											: weights.priceWeight.toString()
+									}
+									placeholder="Weight"
+									onChange={HandleWeights}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
+
 							<Input
-								placeholder="Price"
+								placeholder="120000"
 								name="price"
 								type="text"
-								value={formData.price.toString()}
+								value={
+									!Number.isNaN(formData.price) ? formData.price.toString() : ""
+								}
 								onChange={handleChange}
 								error={formErrors.price}
 								className="w-full rounded-lg border-1 border-[#444d56] p-4"
@@ -360,8 +458,28 @@ export default function CompareForm({
 
 						{/* Location */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="location"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Weight
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={
+										Number.isNaN(weights.locationWeight)
+											? ""
+											: weights.locationWeight.toString()
+									}
+									placeholder="Weight"
+									onChange={HandleWeights}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
 							<Input
-								placeholder="Location"
+								placeholder="1400 Broadway St New York, NY"
 								name="location"
 								type="text"
 								value={formData.location}
@@ -373,8 +491,28 @@ export default function CompareForm({
 
 						{/* Bedrooms */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="location"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Bedrooms
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={
+										Number.isNaN(weights.bedroomsWeight)
+											? ""
+											: weights.bedroomsWeight.toString()
+									}
+									placeholder="Weight"
+									onChange={HandleWeights}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
 							<Input
-								placeholder="Bedrooms"
+								placeholder="3"
 								name="bedrooms"
 								type="number"
 								value={formData.bedrooms.toString()}
@@ -386,8 +524,27 @@ export default function CompareForm({
 
 						{/* Bathrooms */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="weight"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Bathrooms
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={weights.bathroomsWeight.toString()}
+									placeholder="Weight"
+									onChange={(e) => {
+										HandleWeights(e);
+									}}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
+
 							<Input
-								placeholder="Bathrooms"
+								placeholder="2"
 								name="bathrooms"
 								type="number"
 								value={formData.bathrooms.toString()}
@@ -399,8 +556,26 @@ export default function CompareForm({
 
 						{/* Square Footage */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="weight"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Square Footage
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={weights.squareFootageWeight.toString()}
+									placeholder="Weight"
+									onChange={(e) => {
+										HandleWeights(e);
+									}}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
 							<Input
-								placeholder="Square Footage"
+								placeholder="1200"
 								name="squareFootage"
 								type="number"
 								value={formData.squareFootage.toString()}
@@ -412,8 +587,26 @@ export default function CompareForm({
 
 						{/* Year Built */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="Proerty Type"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Year Built
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={weights.yearBuiltWeight.toString()}
+									placeholder="Weight"
+									onChange={(e) => {
+										HandleWeights(e);
+									}}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
 							<Input
-								placeholder="Year Built"
+								placeholder="1999"
 								name="yearBuilt"
 								type="number"
 								value={formData.yearBuilt.toString()}
@@ -425,9 +618,28 @@ export default function CompareForm({
 
 						{/* Property Features */}
 						<div>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+								<label
+									htmlFor="weight"
+									className="w-20 text-xl font-medium text-gray-600"
+								>
+									Property features
+								</label>
+								<Input
+									name="weight"
+									type="text"
+									value={weights.propertyFeaturesWeight.toString()}
+									placeholder="Weight"
+									onChange={(e) => {
+										HandleWeights(e);
+									}}
+									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+								/>
+							</div>
+							<label htmlFor="propertyFeatures">Property Features</label>
 							<textarea
 								name="propertyFeatures"
-								placeholder="Add property features"
+								placeholder="Start searching property features..."
 								value={newFeature}
 								onChange={handlePropertyFeaturesChange}
 								className={`h-32 w-full rounded-lg border p-4 text-[#aabfc6] ${isSpaceInvalid ? "border-red-500" : "border-[#444d56]"}`}
@@ -475,8 +687,9 @@ export default function CompareForm({
 
 						{/* Description */}
 						<div>
+							<label htmlFor="description">Description</label>
 							<textarea
-								placeholder="Description"
+								placeholder="optional"
 								name="description"
 								value={formData.description}
 								onChange={handleChange}
