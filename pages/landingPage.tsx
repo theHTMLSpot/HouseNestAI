@@ -20,7 +20,8 @@ export default function LandingPage() {
 			{/* hero section */}
 			<div
 				className="relative flex min-h-[85vh] w-full flex-col items-center justify-center bg-gradient-to-b from-[#000000] to-[#6c757d] bg-cover bg-center"
-				style={{ backgroundImage: "url(/images/hero.jpg)" }}
+				style={{ backgroundImage: `url("/images/hero.jpg")` }}
+
 			>
 				{/* Background overlay */}
 				<div className="absolute inset-0 bg-black opacity-50"></div>
