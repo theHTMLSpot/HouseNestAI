@@ -5,6 +5,7 @@ import { Title, Input } from "@/components/ui/components";
 import { propertyFeatures as propertyFeaturesSuggestions } from "@/utils/propertyFeatues";
 import { Card, Button } from "@/components/ui/components";
 import { Listing } from "@/types/UserProps";
+import Image from "next/image";
 
 export default function CompareForm({
 	setCurrentStep,
@@ -20,6 +21,26 @@ export default function CompareForm({
 	const [scaling, setScaling] = useState<boolean>(false);
 
 	const [mouseX, setMouseX] = useState(0);
+
+	const [isDirty, setDirty] = useState(false);
+
+	useEffect(() => {
+		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			if (isDirty) {
+				const confirmationMessage =
+					"Your progress has not been saved. Are you sure you want to reload?";
+				event.preventDefault(); // This is necessary for browsers that support custom messages.
+				event.returnValue = confirmationMessage; // Standard for most browsers.
+				return confirmationMessage; // This is for older browsers that still need a return value.
+			}
+		};
+
+		window.addEventListener("beforeunload", handleBeforeUnload);
+
+		return () => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
+		};
+	}, [isDirty]);
 
 	// Track mouseX globallyß
 	useEffect(() => {
@@ -88,6 +109,7 @@ export default function CompareForm({
 	};
 
 	const handlePropertyUrlInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setDirty(true);
 		const value = e.target.value;
 		console.log("handlePropertyUrlInput called with:", value);
 
@@ -117,7 +139,7 @@ export default function CompareForm({
 		location: "Malta, St. Julians",
 		yearBuilt: 1985,
 		squareFootage: 400,
-		imageUrl: "/images/villa.jpg",
+		imageUrl: "/images/villa.png",
 		propertyType: "Villa",
 		bedrooms: 4,
 		bathrooms: 3,
@@ -219,6 +241,7 @@ export default function CompareForm({
 			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 		>,
 	) => {
+		setDirty(true);
 		const { name, value } = e.target;
 
 		setFormData((prev) => ({
@@ -283,6 +306,7 @@ export default function CompareForm({
 		});
 
 		setCurrentStep(2);
+		setDirty(false);
 	};
 
 	// State for the auto-suggest dropdown
@@ -340,6 +364,7 @@ export default function CompareForm({
 	};
 
 	const HandleWeights = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setDirty(true);
 		const { name, value } = e.target;
 
 		// Always update the raw input
@@ -371,155 +396,177 @@ export default function CompareForm({
 					className="h-[90vh] overflow-x-scroll bg-[#222b30] p-8"
 					style={{ width: `calc(${wLeft / 100} * 100vw)` }}
 				>
-					<Title
-						text="Your Ideal Home"
-						level={1}
-						className="mb-6 text-4xl font-bold text-[#aabfc6]"
-					/>
+					<div className="flex items-center justify-between">
+						<Image
+							src="/images/house.png"
+							alt="House"
+							width={50}
+							height={50}
+							className="aspect-auto w-1/2"
+						/>
+						<Title
+							text="Your Ideal Home"
+							level={1}
+							className="mb-6 text-4xl font-bold text-[#aabfc6]"
+						/>
+					</div>
 
 					<form onSubmit={handleSubmit} className="space-y-6">
 						{/* Property Type (Dropdown) */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+							<Input
+								name="weight"
+								type="range"
+								minLength={0}
+								maxLength={10}
+								value={weights.propertyTypeWeight}
+								placeholder="Weight"
+								onChange={(e) => {
+									HandleWeights(e);
+								}}
+								className="h-2 w-full flex-1 appearance-none rounded-lg bg-gray-700 transition-all duration-300 focus:outline-none"
+							/>
+							<div className="flex h-20 w-[100%] items-center-safe justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
 								<label
-									htmlFor="Proerty Type"
-									className="w-20 text-xl font-medium text-gray-600"
+									htmlFor="propertyType"
+									className="text-md w-full font-medium text-gray-400"
 								>
 									Property Type
 								</label>
-								<Input
-									name="weight"
-									type="text"
-									value={weights.propertyTypeWeight}
-									placeholder="Weight"
-									onChange={(e) => {
-										HandleWeights(e);
-									}}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
-								/>
+								<select
+									id="propertyType"
+									name="propertyType"
+									value={formData.propertyType}
+									onChange={handleChange}
+									className="w-[100%] rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
+								>
+									<option value="" disabled>
+										Select Property Type
+									</option>
+									<option value="House">House</option>
+									<option value="Apartment">Apartment</option>
+									<option value="Condo">Condo</option>
+									<option value="Villa">Villa</option>
+									<option value="Townhouse">Townhouse</option>
+								</select>
 							</div>
-							<select
-								name="propertyType"
-								value={formData.propertyType}
-								onChange={handleChange}
-								className="w-full rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
-							>
-								<option value="" disabled>
-									Select Property Type
-								</option>
-								<option value="House">House</option>
-								<option value="Apartment">Apartment</option>
-								<option value="Condo">Condo</option>
-								<option value="Villa">Villa</option>
-								<option value="Townhouse">Townhouse</option>
-							</select>
-							{formErrors.propertyType && (
-								<span className="text-sm text-red-500">
-									{formErrors.propertyType}
-								</span>
-							)}
 						</div>
 
 						{/* Price */}
-						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+
+						<div className="flex flex-col">
+							<Input
+								name="weight"
+								type="range"
+								value={weights.priceWeight}
+								placeholder="Weight"
+								minLength={0}
+								maxLength={10}
+								onChange={HandleWeights}
+								className="h-[100%] w-full flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+							/>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
 								<label
 									htmlFor="price"
-									className="w-20 text-xl font-medium text-gray-600"
+									className="text-md w-full font-medium text-gray-400"
 								>
 									Price
 								</label>
 								<Input
-									name="weight"
+									placeholder="120000"
+									name="price"
+									id="price"
 									type="text"
 									value={
-										Number.isNaN(weights.priceWeight)
-											? ""
-											: weights.priceWeight.toString()
+										!Number.isNaN(formData.price)
+											? formData.price.toString()
+											: ""
 									}
-									placeholder="Weight"
-									onChange={HandleWeights}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									onChange={handleChange}
+									className="w-[100%] rounded-lg border-1 border-[#444d56]"
 								/>
 							</div>
-
-							<Input
-								placeholder="120000"
-								name="price"
-								type="text"
-								value={
-									!Number.isNaN(formData.price) ? formData.price.toString() : ""
-								}
-								onChange={handleChange}
-								error={formErrors.price}
-								className="w-full rounded-lg border-1 border-[#444d56] p-4"
-							/>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.price && (
+									<span className="text-sm text-red-500">
+										{formErrors.price}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Location */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+							<Input
+								name="weight"
+								type="range"
+								value={weights.locationWeight}
+								minLength={0}
+								maxLength={10}
+								placeholder="Weight"
+								onChange={HandleWeights}
+								className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+							/>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
 								<label
 									htmlFor="location"
-									className="w-20 text-xl font-medium text-gray-600"
+									className="text-md w-full font-medium text-gray-400"
 								>
-									Weight
+									location
 								</label>
 								<Input
-									name="weight"
+									placeholder="1400 Broadway St New York, NY"
+									name="location"
 									type="text"
-									value={
-										Number.isNaN(weights.locationWeight)
-											? ""
-											: weights.locationWeight.toString()
-									}
-									placeholder="Weight"
-									onChange={HandleWeights}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									value={formData.location}
+									onChange={handleChange}
+									className="w-[100%] rounded-lg border-1 border-[#444d56]"
 								/>
 							</div>
-							<Input
-								placeholder="1400 Broadway St New York, NY"
-								name="location"
-								type="text"
-								value={formData.location}
-								onChange={handleChange}
-								error={formErrors.location}
-								className="w-full rounded-lg border-1 border-[#444d56] p-4"
-							/>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.location && (
+									<span className="text-sm text-red-500">
+										{formErrors.location}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Bedrooms */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
+							<Input
+								name="weight"
+								type="range"
+								value={weights.bedroomsWeight}
+								placeholder="Weight"
+								onChange={HandleWeights}
+								minLength={0}
+								maxLength={10}
+								className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+							/>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
 								<label
 									htmlFor="location"
-									className="w-20 text-xl font-medium text-gray-600"
+									className="text-md w-full font-medium text-gray-400"
 								>
 									Bedrooms
 								</label>
 								<Input
-									name="weight"
-									type="text"
-									value={
-										Number.isNaN(weights.bedroomsWeight)
-											? ""
-											: weights.bedroomsWeight.toString()
-									}
-									placeholder="Weight"
-									onChange={HandleWeights}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									placeholder="3"
+									name="bedrooms"
+									type="number"
+									value={formData.bedrooms.toString()}
+									onChange={handleChange}
+									className="w-[100%] rounded-lg border-1 border-[#444d56]"
 								/>
 							</div>
-							<Input
-								placeholder="3"
-								name="bedrooms"
-								type="number"
-								value={formData.bedrooms.toString()}
-								onChange={handleChange}
-								error={formErrors.bedrooms}
-								className="w-full rounded-lg border-1 border-[#444d56] p-4"
-							/>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.bedrooms && (
+									<span className="text-sm text-red-500">
+										{formErrors.bedrooms}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Bathrooms */}

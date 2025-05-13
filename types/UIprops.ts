@@ -6,6 +6,7 @@ export interface ButtonProps {
 }
 
 export interface InputProps {
+	id?: string;
 	type: string;
 	name?: string;
 	placeholder?: string;

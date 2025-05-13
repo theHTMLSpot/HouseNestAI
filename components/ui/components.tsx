@@ -21,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, className }) => {
 
 // Input Component
 const Input: React.FC<InputProps> = ({
+	id,
 	type,
 	name,
 	placeholder,
@@ -40,6 +41,7 @@ const Input: React.FC<InputProps> = ({
 	return (
 		<div>
 			<input
+				id={id}
 				type={type}
 				name={name}
 				placeholder={placeholder}
@@ -54,6 +56,8 @@ const Input: React.FC<InputProps> = ({
 				autoComplete={autoComplete}
 				autoFocus={autoFocus}
 				readOnly={readOnly}
+				max={maxLength}
+				min={minLength}
 			/>
 			{/* Show error message */}
 			{error && <span className="m-1 text-sm text-red-500">{error}</span>}
