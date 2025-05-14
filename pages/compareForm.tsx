@@ -6,7 +6,7 @@ import { propertyFeatures as propertyFeaturesSuggestions } from "@/utils/propert
 import { Card, Button } from "@/components/ui/components";
 import { Listing } from "@/types/UserProps";
 import Image from "next/image";
-
+import Slider from "@/components/ui/compare/slider";
 export default function CompareForm({
 	setCurrentStep,
 }: {
@@ -412,25 +412,18 @@ export default function CompareForm({
 					</div>
 
 					<form onSubmit={handleSubmit} className="space-y-6">
-						{/* Property Type (Dropdown) */}
+						{/* Property Type */}
 						<div>
-							<Input
-								name="weight"
-								type="range"
-								minLength={0}
-								maxLength={10}
-								value={weights.propertyTypeWeight}
-								placeholder="Weight"
-								onChange={(e) => {
-									HandleWeights(e);
-								}}
-								className="h-2 w-full flex-1 appearance-none rounded-lg bg-gray-700 transition-all duration-300 focus:outline-none"
+							<Slider
+								min={0}
+								max={10}
+								value={parseFloat(weights.propertyTypeWeight)}
+								tooltip="Adjust how important the property type is for you"
+								onChange_={HandleWeights}
+								name="propertyTypeWeight"
 							/>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
-								<label
-									htmlFor="propertyType"
-									className="text-md w-full font-medium text-gray-400"
-								>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
+								<label className="text-md w-full font-medium text-gray-400">
 									Property Type
 								</label>
 								<select
@@ -438,7 +431,7 @@ export default function CompareForm({
 									name="propertyType"
 									value={formData.propertyType}
 									onChange={handleChange}
-									className="w-[100%] rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
+									className="w-full rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
 								>
 									<option value="" disabled>
 										Select Property Type
@@ -450,32 +443,32 @@ export default function CompareForm({
 									<option value="Townhouse">Townhouse</option>
 								</select>
 							</div>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.propertyType && (
+									<span className="text-sm text-red-500">
+										{formErrors.propertyType}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Price */}
-
 						<div className="flex flex-col">
-							<Input
-								name="weight"
-								type="range"
-								value={weights.priceWeight}
-								placeholder="Weight"
-								minLength={0}
-								maxLength={10}
-								onChange={HandleWeights}
-								className="h-[100%] w-full flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+							<Slider
+								value={parseFloat(weights.priceWeight)}
+								min={0}
+								max={10}
+								onChange_={HandleWeights}
+								tooltip="Adjust how important the price is for you"
+								name="priceWeight"
 							/>
 							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
-								<label
-									htmlFor="price"
-									className="text-md w-full font-medium text-gray-400"
-								>
+								<label className="text-md w-full font-medium text-gray-400">
 									Price
 								</label>
 								<Input
 									placeholder="120000"
 									name="price"
-									id="price"
 									type="text"
 									value={
 										!Number.isNaN(formData.price)
@@ -483,7 +476,7 @@ export default function CompareForm({
 											: ""
 									}
 									onChange={handleChange}
-									className="w-[100%] rounded-lg border-1 border-[#444d56]"
+									className="w-full rounded-lg border border-[#444d56]"
 								/>
 							</div>
 							<div className="flex h-10 w-[100%] items-center justify-end px-4">
@@ -497,22 +490,17 @@ export default function CompareForm({
 
 						{/* Location */}
 						<div>
-							<Input
-								name="weight"
-								type="range"
-								value={weights.locationWeight}
-								minLength={0}
-								maxLength={10}
-								placeholder="Weight"
-								onChange={HandleWeights}
-								className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+							<Slider
+								value={parseFloat(weights.locationWeight)}
+								min={0}
+								max={10}
+								onChange_={HandleWeights}
+								tooltip="Adjust how important the location is for you"
+								name="locationWeight"
 							/>
 							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
-								<label
-									htmlFor="location"
-									className="text-md w-full font-medium text-gray-400"
-								>
-									location
+								<label className="text-md w-full font-medium text-gray-400">
+									Location
 								</label>
 								<Input
 									placeholder="1400 Broadway St New York, NY"
@@ -520,7 +508,7 @@ export default function CompareForm({
 									type="text"
 									value={formData.location}
 									onChange={handleChange}
-									className="w-[100%] rounded-lg border-1 border-[#444d56]"
+									className="w-full rounded-lg border border-[#444d56]"
 								/>
 							</div>
 							<div className="flex h-10 w-[100%] items-center justify-end px-4">
@@ -534,21 +522,16 @@ export default function CompareForm({
 
 						{/* Bedrooms */}
 						<div>
-							<Input
-								name="weight"
-								type="range"
-								value={weights.bedroomsWeight}
-								placeholder="Weight"
-								onChange={HandleWeights}
-								minLength={0}
-								maxLength={10}
-								className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+							<Slider
+								value={parseFloat(weights.bedroomsWeight)}
+								min={0}
+								max={10}
+								onChange_={HandleWeights}
+								tooltip="Adjust importance of bedrooms"
+								name="bedroomsWeight"
 							/>
 							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
-								<label
-									htmlFor="location"
-									className="text-md w-full font-medium text-gray-400"
-								>
+								<label className="text-md w-full font-medium text-gray-400">
 									Bedrooms
 								</label>
 								<Input
@@ -557,7 +540,7 @@ export default function CompareForm({
 									type="number"
 									value={formData.bedrooms.toString()}
 									onChange={handleChange}
-									className="w-[100%] rounded-lg border-1 border-[#444d56]"
+									className="w-full rounded-lg border border-[#444d56]"
 								/>
 							</div>
 							<div className="flex h-10 w-[100%] items-center justify-end px-4">
@@ -571,119 +554,122 @@ export default function CompareForm({
 
 						{/* Bathrooms */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
-								<label
-									htmlFor="weight"
-									className="w-20 text-xl font-medium text-gray-600"
-								>
+							<Slider
+								value={parseFloat(weights.bathroomsWeight)}
+								min={0}
+								max={10}
+								onChange_={HandleWeights}
+								tooltip="Adjust importance of bathrooms"
+								name="bathroomsWeight"
+							/>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
+								<label className="text-md w-full font-medium text-gray-400">
 									Bathrooms
 								</label>
 								<Input
-									name="weight"
-									type="text"
-									value={weights.bathroomsWeight.toString()}
-									placeholder="Weight"
-									onChange={(e) => {
-										HandleWeights(e);
-									}}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									placeholder="2"
+									name="bathrooms"
+									type="number"
+									value={formData.bathrooms.toString()}
+									onChange={handleChange}
+									className="w-full rounded-lg border border-[#444d56] p-4"
 								/>
 							</div>
-
-							<Input
-								placeholder="2"
-								name="bathrooms"
-								type="number"
-								value={formData.bathrooms.toString()}
-								onChange={handleChange}
-								error={formErrors.bathrooms}
-								className="w-full rounded-lg border-1 border-[#444d56] p-4"
-							/>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.bathrooms && (
+									<span className="text-sm text-red-500">
+										{formErrors.bathrooms}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Square Footage */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
-								<label
-									htmlFor="weight"
-									className="w-20 text-xl font-medium text-gray-600"
-								>
+							<Slider
+								value={parseFloat(weights.squareFootageWeight)}
+								min={0}
+								max={10}
+								onChange_={HandleWeights}
+								tooltip="Adjust importance of square footage"
+								name="squareFootageWeight"
+							/>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
+								<label className="text-md w-full font-medium text-gray-400">
 									Square Footage
 								</label>
 								<Input
-									name="weight"
-									type="text"
-									value={weights.squareFootageWeight.toString()}
-									placeholder="Weight"
-									onChange={(e) => {
-										HandleWeights(e);
-									}}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									placeholder="1200"
+									name="squareFootage"
+									type="number"
+									value={formData.squareFootage.toString()}
+									onChange={handleChange}
+									className="w-full rounded-lg border border-[#444d56] p-4"
 								/>
 							</div>
-							<Input
-								placeholder="1200"
-								name="squareFootage"
-								type="number"
-								value={formData.squareFootage.toString()}
-								onChange={handleChange}
-								error={formErrors.squareFootage}
-								className="w-full rounded-lg border-1 border-[#444d56] p-4"
-							/>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.squareFootage && (
+									<span className="text-sm text-red-500">
+										{formErrors.squareFootage}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Year Built */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
-								<label
-									htmlFor="Proerty Type"
-									className="w-20 text-xl font-medium text-gray-600"
-								>
+							<Slider
+								value={parseFloat(weights.yearBuiltWeight)}
+								min={0}
+								max={10}
+								onChange_={HandleWeights}
+								tooltip="Adjust importance of year built"
+								name="yearBuiltWeight"
+							/>
+							<div className="flex h-20 w-full items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
+								<label className="text-md w-full font-medium text-gray-400">
 									Year Built
 								</label>
 								<Input
-									name="weight"
-									type="text"
-									value={weights.yearBuiltWeight.toString()}
-									placeholder="Weight"
-									onChange={(e) => {
-										HandleWeights(e);
-									}}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									placeholder="1999"
+									name="yearBuilt"
+									type="number"
+									value={formData.yearBuilt.toString()}
+									onChange={handleChange}
+									className="w-full rounded-lg border border-[#444d56] p-4"
 								/>
 							</div>
-							<Input
-								placeholder="1999"
-								name="yearBuilt"
-								type="number"
-								value={formData.yearBuilt.toString()}
-								onChange={handleChange}
-								error={formErrors.yearBuilt}
-								className="w-full rounded-lg border-1 border-[#444d56] p-4"
-							/>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.yearBuilt && (
+									<span className="text-sm text-red-500">
+										{formErrors.yearBuilt}
+									</span>
+								)}
+							</div>
 						</div>
 
 						{/* Property Features */}
 						<div>
-							<div className="flex h-20 w-[100%] items-center-safe justify-between">
-								<label
-									htmlFor="weight"
-									className="w-20 text-xl font-medium text-gray-600"
-								>
-									Property features
+							<div className="mt-10 mb-2 flex h-20 items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
+								<label className="text-md w-full font-medium text-gray-400">
+									Property Features
 								</label>
 								<Input
-									name="weight"
+									value={weights.propertyFeaturesWeight}
+									onChange={HandleWeights}
 									type="text"
-									value={weights.propertyFeaturesWeight.toString()}
-									placeholder="Weight"
-									onChange={(e) => {
-										HandleWeights(e);
-									}}
-									className="h-[100%] flex-1 rounded-lg border border-[#444d56] p-2 text-sm"
+									placeholder="Adjust importance of property features"
+									className="w-full rounded-lg border border-[#444d56] p-4"
+									name="propertyFeaturesWeight"
 								/>
 							</div>
-							<label htmlFor="propertyFeatures">Property Features</label>
+							<div className="flex h-10 w-[100%] items-center justify-end px-4">
+								{formErrors.propertyFeatures && (
+									<span className="text-sm text-red-500">
+										{formErrors.propertyFeatures}
+									</span>
+								)}
+							</div>
 							<textarea
 								name="propertyFeatures"
 								placeholder="Start searching property features..."
@@ -696,8 +682,6 @@ export default function CompareForm({
 									Space is not allowed
 								</span>
 							)}
-
-							{/* Suggestions Dropdown */}
 							{isDropdownVisible && suggestions.length > 0 && (
 								<div className="mt-2 max-h-40 overflow-y-auto rounded-lg border border-[#444d56] bg-[#222b30]">
 									{suggestions.map((suggestion, index) => (
@@ -711,47 +695,46 @@ export default function CompareForm({
 									))}
 								</div>
 							)}
-						</div>
-
-						{/* Selected Features */}
-						<div className="mt-4 flex flex-wrap gap-2">
-							{formData.propertyFeatures.map((feature, index) => (
-								<div
-									key={index}
-									className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
-								>
-									<span className="text-[#aabfc6]">{feature}</span>
-									<button
-										type="button"
-										className="text-red-500"
-										onClick={() => handleRemoveFeature(feature)}
+							<div className="mt-4 flex flex-wrap gap-2">
+								{formData.propertyFeatures.map((feature, index) => (
+									<div
+										key={index}
+										className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
 									>
-										✖
-									</button>
-								</div>
-							))}
+										<span className="text-[#aabfc6]">{feature}</span>
+										<button
+											type="button"
+											className="text-red-500"
+											onClick={() => handleRemoveFeature(feature)}
+										>
+											✖
+										</button>
+									</div>
+								))}
+							</div>
 						</div>
 
 						{/* Description */}
 						<div>
-							<label htmlFor="description">Description</label>
+							<div className="mt-10 mb-2 flex h-20 items-center justify-between rounded-md border border-gray-400 bg-[#1c242c] px-4">
+								<label className="text-md w-full font-medium text-gray-400">
+									Description
+								</label>
+							</div>
 							<textarea
 								placeholder="optional"
 								name="description"
 								value={formData.description}
 								onChange={handleChange}
-								className="w-full rounded-lg border p-4 text-[#aabfc6]"
+								className="h-32 w-full rounded-lg border border-[#444d56] p-4 text-[#aabfc6]"
 							/>
 						</div>
 
-						{/* Submit Button */}
+						{/* Submit */}
 						<div className="flex justify-center">
 							<button
 								type="submit"
 								className="mt-4 rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors duration-300 hover:bg-blue-700"
-								onClick={(e) => {
-									handleSubmit(e);
-								}}
 							>
 								Submit Listing
 							</button>
@@ -759,39 +742,28 @@ export default function CompareForm({
 					</form>
 				</div>
 
+				{/* Draggable Divider */}
 				<div
 					className="w-[2px] cursor-ew-resize bg-gray-50"
-					style={{ height: "100%" }}
-					onMouseDown={() => {
-						handleMouseDown();
-					}}
-					onMouseUp={() => {
-						handleMouseUp();
-					}}
+					onMouseDown={handleMouseDown}
+					onMouseUp={handleMouseUp}
 				/>
-				{/* right side */}
-				{hasLink ? (
+
+				{/* Right Side: Listing Card */}
+				{hasLink && (
 					<Card
-						title={listing.title ? listing.title : "No title available."}
+						title={listing.title || "No title available."}
 						description={listing.description || ""}
 						imageUrl={listing.imageUrl || ""}
-						className="w-1/2 overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
+						className="h-full overflow-x-scroll rounded-lg bg-[#222b30] shadow-lg"
 						style={{ width: `calc(${1 - wLeft / 100} * 100vw)` }}
 					>
-						{/* Card Content */}
-						<div className="p-6">
-							{/* Title */}
-							<h3 className="text-2xl font-bold text-[#aabfc6]">
-								{listing.title}
-							</h3>
-
-							{/* Description */}
-							<p className="mt-2 text-sm text-[#aabfc6]">
+						<div className="p-6 text-[#aabfc6]">
+							<h3 className="text-2xl font-bold">{listing.title}</h3>
+							<p className="mt-2 text-sm">
 								{listing.description || "No description available."}
 							</p>
-
-							{/* Property Details */}
-							<div className="mt-4 space-y-2 text-sm text-[#aabfc6]">
+							<div className="mt-4 space-y-2 text-sm">
 								<p>
 									<strong>Space:</strong> {listing.squareFootage} sq ft
 								</p>
@@ -810,16 +782,12 @@ export default function CompareForm({
 								<p>
 									<strong>Bathrooms:</strong> {listing.bathrooms}
 								</p>
-
-								{/* Property Features */}
 								<div>
 									<strong>Property Features:</strong>
 									<ul className="mt-2 space-y-1">
-										{listing.propertyFeatures.length > 0 ? (
-											listing.propertyFeatures.map((feature, index) => (
-												<li key={index} className="text-[#aabfc6]">
-													{feature}
-												</li>
+										{listing.propertyFeatures?.length > 0 ? (
+											listing.propertyFeatures.map((feature, i) => (
+												<li key={i}>{feature}</li>
 											))
 										) : (
 											<p>No features listed.</p>
@@ -829,7 +797,8 @@ export default function CompareForm({
 							</div>
 						</div>
 					</Card>
-				) : (
+				)}
+				{!hasLink && (
 					<div
 						className="flex flex-col items-center justify-center overflow-hidden rounded-lg bg-[#222b30] shadow-lg"
 						style={{ width: `calc(${1 - wLeft / 100} * 100vw)` }}
