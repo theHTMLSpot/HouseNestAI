@@ -43,6 +43,8 @@ export default function CompareForm({
 	}, [isDirty]);
 
 	// Track mouseX globallyß
+	const initialMouseXRef = useRef<number | null>(null);
+
 	useEffect(() => {
 		const handleMouseMove = (event: MouseEvent) => {
 			setMouseX(event.clientX);
@@ -52,23 +54,20 @@ export default function CompareForm({
 		return () => window.removeEventListener("mousemove", handleMouseMove);
 	}, []);
 
-	const initialMouseXRef = useRef<number | null>(null);
-
-	// Handle scaling logic
 	useEffect(() => {
 		let animationFrameId: number;
 
 		const update = () => {
-			if (scaling && initialMouseXRef.current !== null) {
-				const deltaX = mouseX - initialMouseXRef.current;
+			if (scaling) {
+				// Calculate width percentage based on absolute mouse X position
+				const newWidth = (mouseX / window.innerWidth) * 100;
 
-				setWLeft((prev) => {
-					const newWidth = prev + deltaX * 0.1; // tweak sensitivity
-					if (newWidth > 35 && newWidth < 75)
-						return Math.min(100, Math.max(0, newWidth));
-					return prev;
+				setWLeft(() => {
+					if (newWidth > 35 && newWidth < 75) {
+						return newWidth;
+					}
+					return wLeft; // fallback to current width
 				});
-				initialMouseXRef.current = mouseX;
 			}
 			animationFrameId = requestAnimationFrame(update);
 		};
@@ -78,12 +77,10 @@ export default function CompareForm({
 		}
 
 		return () => cancelAnimationFrame(animationFrameId);
-	}, [scaling, mouseX]);
+	}, [scaling, mouseX, wLeft]);
 
-	// Start scaling
 	const handleMouseDown = () => {
 		setScaling(true);
-		initialMouseXRef.current = mouseX;
 	};
 
 	const handleMouseUp = () => {
