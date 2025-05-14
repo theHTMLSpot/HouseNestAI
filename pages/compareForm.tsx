@@ -169,15 +169,15 @@ export default function CompareForm({
 	});
 
 	const [weights, setWeights] = useState({
-		propertyTypeWeight: "",
-		priceWeight: "",
-		locationWeight: "",
-		bedroomsWeight: "",
-		bathroomsWeight: "",
-		squareFootageWeight: "",
-		yearBuiltWeight: "",
-		propertyFeaturesWeight: "",
-		descriptionWeight: "",
+		propertyTypeWeight: "5",
+		priceWeight: "5",
+		locationWeight: "5",
+		bedroomsWeight: "5",
+		bathroomsWeight: "5",
+		squareFootageWeight: "5",
+		yearBuiltWeight: "5",
+		propertyFeaturesWeight: "5",
+		descriptionWeight: "5",
 	});
 
 	const [weightErrors, setWeightErrors] = useState({
