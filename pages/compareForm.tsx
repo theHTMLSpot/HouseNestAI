@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { Title, Input } from "@/components/ui/components";
-import { propertyFeatures as propertyFeaturesSuggestions } from "@/utils/propertyFeatues";
 import { Card, Button } from "@/components/ui/components";
 import { Listing } from "@/types/UserProps";
 import Image from "next/image";
 import Slider from "@/components/ui/compare/slider";
+
+import * as formUtils from "@/utils/formUtils";
+
 export default function CompareForm({
 	setCurrentStep,
 }: {
@@ -42,8 +44,16 @@ export default function CompareForm({
 		};
 	}, [isDirty]);
 
-	// Track mouseX globallyß
+	// Track mouseX globally
 	const initialMouseXRef = useRef<number | null>(null);
+
+	const handleMouseDown = () => {
+		formUtils.handleMouseDownUtil(setScaling);
+	};
+
+	const handleMouseUp = () => {
+		formUtils.handleMouseUpUtil(setScaling, initialMouseXRef);
+	};
 
 	useEffect(() => {
 		const handleMouseMove = (event: MouseEvent) => {
@@ -79,54 +89,10 @@ export default function CompareForm({
 		return () => cancelAnimationFrame(animationFrameId);
 	}, [scaling, mouseX, wLeft]);
 
-	const handleMouseDown = () => {
-		setScaling(true);
-	};
-
-	const handleMouseUp = () => {
-		setScaling(false);
-		initialMouseXRef.current = null;
-	};
-
 	useEffect(() => {
-		window.addEventListener("mouseup", handleMouseUp);
-		return () => window.removeEventListener("mouseup", handleMouseUp);
+		window.addEventListener("mouseup", () => handleMouseUp);
+		return () => window.removeEventListener("mouseup", () => handleMouseUp);
 	}, []);
-
-	const onInputFinished = () => {
-		try {
-			new URL(propertyUrl);
-			setPropertyUrlError("");
-			setHasLink(true);
-		} catch {
-			setPropertyUrlError("Please enter a valid URL");
-			setHasLink(false);
-			return;
-		}
-	};
-
-	const handlePropertyUrlInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setDirty(true);
-		const value = e.target.value;
-		console.log("handlePropertyUrlInput called with:", value);
-
-		if (value.includes("\n")) onInputFinished();
-
-		try {
-			// Basic URL validation
-			setPropertyUrl(value);
-			setPropertyUrlError("");
-			console.log("URL accepted:", value);
-		} catch {
-			setPropertyUrlError("Please enter a valid URL");
-			console.warn("Invalid URL format");
-		}
-		if (!value.trim()) {
-			setPropertyUrlError("Valid URL is required");
-			console.warn("Empty input – Valid URL is required");
-			return;
-		}
-	};
 
 	const listing: Listing = {
 		title: "Luxury Modern Villa with Pool",
@@ -192,129 +158,6 @@ export default function CompareForm({
 		descriptionWeight: "",
 	});
 
-	// Suggestions for property features
-
-	// Handle input change for form fields
-	// 🔧 Centralized validation function
-	const validateField = (
-		name: string,
-		value: string | number | Array<string | number>,
-	): string => {
-		if (
-			["price", "bedrooms", "bathrooms", "squareFootage", "yearBuilt"].includes(
-				name,
-			) ||
-			name.includes("Weight")
-		) {
-			const numValue =
-				typeof value === "string" ? parseFloat(value) : (value as number);
-			if (isNaN(numValue) || (numValue <= 0 && !name.includes("Weight"))) {
-				return `${capitalize(name)} must be a valid positive number.`;
-			}
-		}
-
-		if (name === "propertyFeatures") {
-			if (!Array.isArray(value) || value.length === 0) {
-				return "Please enter at least one property feature.";
-			}
-		}
-
-		if (
-			["propertyType", "location"].includes(name) &&
-			(value === "" || value === null)
-		) {
-			return `${capitalize(name)} is required.`;
-		}
-
-		return "";
-	};
-
-	const capitalize = (s: string): string =>
-		s.charAt(0).toUpperCase() + s.slice(1);
-
-	// ✍️ Handle field change
-	const handleChange = (
-		e: React.ChangeEvent<
-			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-		>,
-	) => {
-		setDirty(true);
-		const { name, value } = e.target;
-
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-
-		const errorMsg = validateField(name, value);
-		if (errorMsg === "") {
-			return;
-		}
-
-		setFormErrors((prev) => ({
-			...prev,
-			[name]: errorMsg,
-		}));
-	};
-
-	// ✅ Full form validation on submit
-	const validateForm = (data: { [key: string]: string | number }) => {
-		const errors: { [key: string]: string } = {};
-		Object.entries(data).forEach(([key, value]) => {
-			const error = validateField(key, value);
-			if (error) errors[key] = error;
-		});
-		return errors;
-	};
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-
-		const formErrors_ = validateForm(
-			formData as unknown as { [key: string]: string | number },
-		);
-		const weightErrors_ = validateForm(
-			weights as { [key: string]: string | number },
-		);
-
-		setFormErrors((prev) => ({
-			...prev,
-			...formErrors_,
-		}));
-
-		setWeightErrors((prev) => ({
-			...prev,
-			...weightErrors_,
-		}));
-
-		const hasErrors =
-			Object.values(formErrors_).some((err) => err !== "") ||
-			Object.values(weightErrors).some((err) => err !== "");
-
-		if (hasErrors) {
-			const firstError = Object.values(formErrors_).find((err) => err !== "");
-			alert(firstError); // optional: focus the field instead
-			return;
-		}
-
-		alert("Listing submitted successfully!");
-
-		setFormData({
-			propertyType: "",
-			price: NaN,
-			location: "",
-			bedrooms: NaN,
-			bathrooms: NaN,
-			squareFootage: NaN,
-			yearBuilt: NaN,
-			propertyFeatures: [],
-			description: "",
-		});
-
-		setCurrentStep(2);
-		setDirty(false);
-	};
-
 	// State for the auto-suggest dropdown
 	const [suggestions, setSuggestions] = useState<string[]>([]);
 	const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -322,76 +165,108 @@ export default function CompareForm({
 	const [isSpaceInvalid, setIsSpaceInvalid] = useState(false);
 
 	// Handle change for property features
-	const handlePropertyFeaturesChange = (
-		e: React.ChangeEvent<HTMLTextAreaElement>,
-	) => {
-		const { value } = e.target;
-		setNewFeature(value);
 
-		// Filter suggestions based on the input
-		if (value.trim().length > 0) {
-			const filteredSuggestions = propertyFeaturesSuggestions.filter(
-				(feature) => feature.toLowerCase().includes(value.toLowerCase()),
-			);
-			setSuggestions(filteredSuggestions);
-			setIsDropdownVisible(true);
-		} else {
-			setSuggestions([]);
-			setIsDropdownVisible(false);
-		}
-
-		if (value.trim() === " ") {
-			setIsSpaceInvalid(true);
-		} else {
-			setIsSpaceInvalid(false);
-		}
-	};
-	// Handle selection of a suggestion
-	const handleSuggestionClick = (suggestion: string) => {
-		if (!formData.propertyFeatures.includes(suggestion)) {
-			setFormData((prev) => ({
-				...prev,
-				propertyFeatures: [...prev.propertyFeatures, suggestion],
-			}));
-		}
-		setNewFeature(""); // Clear the input
-		setSuggestions([]);
-		setIsDropdownVisible(false);
-	};
-
-	// Handle removing a feature
-	const handleRemoveFeature = (feature: string) => {
-		setFormData((prev) => ({
-			...prev,
-			propertyFeatures: prev.propertyFeatures.filter(
-				(item) => item !== feature,
-			),
-		}));
+	const handleSubmit = (e: React.FormEvent) => {
+		formUtils.handleSubmitUtil(
+			e,
+			formData, // ✅ Actual form data
+			weights, // ✅ Actual weights
+			weightErrors, // ✅ Weight errors
+			setWeightErrors as React.Dispatch<
+				React.SetStateAction<Record<string, string>>
+			>, // ✅ Setter for weight errors
+			setFormErrors as React.Dispatch<
+				React.SetStateAction<Record<string, string>>
+			>, // ✅ Setter for form errors
+			setFormData, // ✅ Setter for form data
+			setWeights as React.Dispatch<
+				React.SetStateAction<Record<string, string>>
+			>, // ✅ Setter for weights
+			setCurrentStep, // ✅ Setter for navigation step
+			setDirty, // ✅ Setter for dirty flag
+		);
 	};
 
 	const HandleWeights = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setDirty(true);
-		const { name, value } = e.target;
+		formUtils.handleWeightsUtil(
+			e,
+			setDirty, // ✅ Setter for dirty flag
+			setWeights as React.Dispatch<
+				React.SetStateAction<Record<string, string>>
+			>, // ✅ Setter for weights
+			setWeightErrors as React.Dispatch<
+				React.SetStateAction<Record<string, string>>
+			>, // ✅ Setter for weight errors
+		);
+	};
 
-		// Always update the raw input
-		setWeights((prev) => ({
-			...prev,
-			[name]: value,
-		}));
+	const handleChange = (
+		e:
+			| React.ChangeEvent<HTMLInputElement>
+			| React.ChangeEvent<HTMLTextAreaElement>
+			| React.ChangeEvent<HTMLSelectElement>,
+	) => {
+		formUtils.handleChangeUtil(
+			e,
+			setFormData, // ✅ Setter for form data
+			setFormErrors as React.Dispatch<
+				React.SetStateAction<Record<string, string>>
+			>, // ✅ Setter for form errors
+			setDirty, // ✅ Setter for dirty flag
+		);
+	};
 
-		// Validation on-the-fly (optional)
-		const parsed = parseFloat(value);
-		if (value !== "" && (isNaN(parsed) || parsed < 0.1 || parsed > 10)) {
-			setWeightErrors((prev) => ({
-				...prev,
-				[name]: "Weight must be between 0.1 and 10",
-			}));
-		} else {
-			setWeightErrors((prev) => ({
-				...prev,
-				[name]: "",
-			}));
-		}
+	const handlePropertyFeaturesChange = (
+		e: React.ChangeEvent<HTMLTextAreaElement>,
+	) => {
+		formUtils.handlePropertyFeaturesChangeUtil(
+			e,
+			setFormData as unknown as React.Dispatch<React.SetStateAction<string>>, // ✅ Setter for form data
+			setFormErrors as unknown as React.Dispatch<
+				React.SetStateAction<string[]>
+			>, // ✅ Setter for form errors
+			setDirty, // ✅ Setter for dirty flag
+			setIsSpaceInvalid,
+			suggestions,
+		);
+	};
+
+	const handleSuggestionClick = (suggestion: string) => {
+		formUtils.handleSuggestionClickUtil(
+			suggestion,
+			formData, // ✅ Actual form data
+			setFormData, // ✅ Setter for form data
+			setNewFeature, // ✅ Setter for new feature
+			setSuggestions, // ✅ Setter for suggestions
+			setIsDropdownVisible, // ✅ Setter for dropdown visibility
+		);
+	};
+
+	const handleRemoveFeature = (feature: string) => {
+		formUtils.handleRemoveFeatureUtil(
+			feature,
+			setFormData, // ✅ Setter for form data
+		);
+	};
+
+	const handlePropertyUrlInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		formUtils.handlePropertyUrlInputUtil(
+			e,
+			setDirty, // ✅ Setter for form data
+			setPropertyUrl, // ✅ Setter for property URL
+			setPropertyUrlError, // ✅ Setter for property URL error
+			propertyUrl, // ✅ Actual property URL
+			setHasLink,
+		);
+	};
+
+	const onInputFinished = () => {
+		formUtils.onInputFinishedUtil(
+			propertyUrl,
+			setPropertyUrl,
+			setPropertyUrlError,
+			setHasLink,
+		);
 	};
 
 	return (
