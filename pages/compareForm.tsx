@@ -207,8 +207,8 @@ export default function CompareForm({
 			name.includes("Weight")
 		) {
 			const numValue =
-				typeof value === "string" ? parseFloat(value) : Number(value);
-			if (isNaN(numValue) || numValue <= 0) {
+				typeof value === "string" ? parseFloat(value) : (value as number);
+			if (isNaN(numValue) || (numValue <= 0 && !name.includes("Weight"))) {
 				return `${capitalize(name)} must be a valid positive number.`;
 			}
 		}
@@ -247,6 +247,10 @@ export default function CompareForm({
 		}));
 
 		const errorMsg = validateField(name, value);
+		if (errorMsg === "") {
+			return;
+		}
+
 		setFormErrors((prev) => ({
 			...prev,
 			[name]: errorMsg,
@@ -273,13 +277,18 @@ export default function CompareForm({
 			weights as { [key: string]: string | number },
 		);
 
+		setFormErrors((prev) => ({
+			...prev,
+			...formErrors_,
+		}));
+
 		setWeightErrors((prev) => ({
 			...prev,
 			...weightErrors_,
 		}));
 
 		const hasErrors =
-			Object.values(formErrors_).some((err) => err !== "") &&
+			Object.values(formErrors_).some((err) => err !== "") ||
 			Object.values(weightErrors).some((err) => err !== "");
 
 		if (hasErrors) {
