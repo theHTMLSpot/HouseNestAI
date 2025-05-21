@@ -36,7 +36,9 @@ export function validateFieldUtil(
 	return "";
 }
 
-export function validateFormUtil(data: { [key: string]: string | number }) {
+export function validateFormUtil(data: {
+	[key: string]: string | number | Array<string | number>;
+}) {
 	const errors: { [key: string]: string } = {};
 	Object.entries(data).forEach(([key, value]) => {
 		const error = validateFieldUtil(key, value);
@@ -50,7 +52,19 @@ export const handleChangeUtil = (
 		HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 	>,
 	setFormData: React.Dispatch<React.SetStateAction<Listing>>,
-	setFormErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>,
+	setFormErrors: React.Dispatch<
+		React.SetStateAction<{
+			propertyType: string;
+			price: string;
+			location: string;
+			bedrooms: string;
+			bathrooms: string;
+			squareFootage: string;
+			yearBuilt: string;
+			propertyFeatures: string;
+			description: string;
+		}>
+	>,
 	setDirty: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
 	setDirty(true);
@@ -236,7 +250,10 @@ export const handleSuggestionClickUtil = (
 	setSuggestions: React.Dispatch<React.SetStateAction<string[]>>,
 	setIsDropdownVisible: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
-	if (!formData.propertyFeatures.includes(suggestion)) {
+	if (
+		formData.propertyFeatures &&
+		!formData.propertyFeatures.includes(suggestion)
+	) {
 		setFormData((prev) => ({
 			...prev,
 			propertyFeatures: [...prev.propertyFeatures, suggestion],

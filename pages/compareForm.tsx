@@ -8,12 +8,15 @@ import Image from "next/image";
 import Slider from "@/components/ui/compare/slider";
 
 import * as formUtils from "@/utils/formUtils";
+import { propertyFeatures } from "@/utils/propertyFeatues";
 
 export default function CompareForm({
 	setCurrentStep,
 }: {
 	setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
+	const propertyFeaturesSuggestions: string[] = propertyFeatures;
+
 	const [hasLink, setHasLink] = useState(false);
 	const [propertyUrl, setPropertyUrl] = useState("");
 	const [propertyUrlError, setPropertyUrlError] = useState("");
@@ -111,6 +114,8 @@ export default function CompareForm({
 
 	// Form state for Ideal Home
 	const [formData, setFormData] = useState<Listing>({
+		title: "",
+		imageUrl: "",
 		propertyType: "",
 		price: NaN,
 		location: "",
@@ -201,17 +206,14 @@ export default function CompareForm({
 	};
 
 	const handleChange = (
-		e:
-			| React.ChangeEvent<HTMLInputElement>
-			| React.ChangeEvent<HTMLTextAreaElement>
-			| React.ChangeEvent<HTMLSelectElement>,
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>,
 	) => {
 		formUtils.handleChangeUtil(
 			e,
 			setFormData, // ✅ Setter for form data
-			setFormErrors as React.Dispatch<
-				React.SetStateAction<Record<string, string>>
-			>, // ✅ Setter for form errors
+			setFormErrors,
 			setDirty, // ✅ Setter for dirty flag
 		);
 	};
@@ -221,13 +223,11 @@ export default function CompareForm({
 	) => {
 		formUtils.handlePropertyFeaturesChangeUtil(
 			e,
-			setFormData as unknown as React.Dispatch<React.SetStateAction<string>>, // ✅ Setter for form data
-			setFormErrors as unknown as React.Dispatch<
-				React.SetStateAction<string[]>
-			>, // ✅ Setter for form errors
-			setDirty, // ✅ Setter for dirty flag
-			setIsSpaceInvalid,
-			suggestions,
+			setNewFeature, // ✅ Setter for new feature
+			setSuggestions, // ✅ Setter for suggestions
+			setIsDropdownVisible, // ✅ Setter for dropdown visibility
+			setIsSpaceInvalid, // ✅ Setter for space invalid
+			propertyFeaturesSuggestions,
 		);
 	};
 
@@ -269,6 +269,30 @@ export default function CompareForm({
 		);
 	};
 
+	/* if (
+		typeof formData === "undefined" ||
+		typeof weights === "undefined" ||
+		typeof formErrors === "undefined" ||
+		typeof weightErrors === "undefined" ||
+		typeof formData.price === "undefined" ||
+		typeof formData.squareFootage === "undefined" ||
+		typeof formData.yearBuilt === "undefined" ||
+		typeof formData.description === "undefined" ||
+		typeof formData.title === "undefined" ||
+		typeof formData.location === "undefined" ||
+		typeof formData.propertyType === "undefined" ||
+		typeof formData.propertyFeatures === "undefined"
+	) {
+		return (
+			<div className="flex min-h-screen flex-col items-center justify-center">
+				<p className="text-2xl text-red-400">
+					Error loading property data fields
+				</p>
+				<Button label="Go Back" onClick={() => window.history.back()} />
+			</div>
+		);
+	} */
+
 	return (
 		<>
 			<div className="flex h-[90vh] justify-center">
@@ -298,7 +322,7 @@ export default function CompareForm({
 							<Slider
 								min={0}
 								max={10}
-								value={parseFloat(weights.propertyTypeWeight)}
+								value={parseFloat(weights.propertyTypeWeight ?? 0)}
 								tooltip="Adjust how important the property type is for you"
 								onChange_={HandleWeights}
 								name="propertyTypeWeight"
@@ -310,7 +334,7 @@ export default function CompareForm({
 								<select
 									id="propertyType"
 									name="propertyType"
-									value={formData.propertyType}
+									value={formData.propertyType ?? ""}
 									onChange={handleChange}
 									className="w-full rounded-lg border bg-[#444d56] p-4 text-[#aabfc6]"
 								>
@@ -336,7 +360,7 @@ export default function CompareForm({
 						{/* Price */}
 						<div className="flex flex-col">
 							<Slider
-								value={parseFloat(weights.priceWeight)}
+								value={parseFloat(weights.priceWeight ?? 0)}
 								min={0}
 								max={10}
 								onChange_={HandleWeights}
@@ -353,7 +377,7 @@ export default function CompareForm({
 									type="text"
 									value={
 										!Number.isNaN(formData.price)
-											? formData.price.toString()
+											? (formData.price ?? "").toString()
 											: ""
 									}
 									onChange={handleChange}
@@ -372,7 +396,7 @@ export default function CompareForm({
 						{/* Location */}
 						<div>
 							<Slider
-								value={parseFloat(weights.locationWeight)}
+								value={parseFloat(weights.locationWeight ?? 0)}
 								min={0}
 								max={10}
 								onChange_={HandleWeights}
@@ -387,7 +411,7 @@ export default function CompareForm({
 									placeholder="1400 Broadway St New York, NY"
 									name="location"
 									type="text"
-									value={formData.location}
+									value={formData.location ?? ""}
 									onChange={handleChange}
 									className="w-full rounded-lg border border-[#444d56]"
 								/>
@@ -404,7 +428,7 @@ export default function CompareForm({
 						{/* Bedrooms */}
 						<div>
 							<Slider
-								value={parseFloat(weights.bedroomsWeight)}
+								value={parseFloat(weights.bedroomsWeight ?? 0)}
 								min={0}
 								max={10}
 								onChange_={HandleWeights}
@@ -419,7 +443,7 @@ export default function CompareForm({
 									placeholder="3"
 									name="bedrooms"
 									type="number"
-									value={formData.bedrooms.toString()}
+									value={(formData.bedrooms ?? "").toString()}
 									onChange={handleChange}
 									className="w-full rounded-lg border border-[#444d56]"
 								/>
@@ -436,7 +460,7 @@ export default function CompareForm({
 						{/* Bathrooms */}
 						<div>
 							<Slider
-								value={parseFloat(weights.bathroomsWeight)}
+								value={parseFloat(weights.bathroomsWeight ?? 0)}
 								min={0}
 								max={10}
 								onChange_={HandleWeights}
@@ -451,7 +475,7 @@ export default function CompareForm({
 									placeholder="2"
 									name="bathrooms"
 									type="number"
-									value={formData.bathrooms.toString()}
+									value={(formData.bathrooms ?? "").toString()}
 									onChange={handleChange}
 									className="w-full rounded-lg border border-[#444d56] p-4"
 								/>
@@ -468,7 +492,7 @@ export default function CompareForm({
 						{/* Square Footage */}
 						<div>
 							<Slider
-								value={parseFloat(weights.squareFootageWeight)}
+								value={parseFloat(weights.squareFootageWeight ?? 0)}
 								min={0}
 								max={10}
 								onChange_={HandleWeights}
@@ -483,7 +507,7 @@ export default function CompareForm({
 									placeholder="1200"
 									name="squareFootage"
 									type="number"
-									value={formData.squareFootage.toString()}
+									value={(formData.squareFootage ?? "").toString()}
 									onChange={handleChange}
 									className="w-full rounded-lg border border-[#444d56] p-4"
 								/>
@@ -515,7 +539,7 @@ export default function CompareForm({
 									placeholder="1999"
 									name="yearBuilt"
 									type="number"
-									value={formData.yearBuilt.toString()}
+									value={(formData.yearBuilt ?? "").toString()}
 									onChange={handleChange}
 									className="w-full rounded-lg border border-[#444d56] p-4"
 								/>
@@ -536,7 +560,7 @@ export default function CompareForm({
 									Property Features
 								</label>
 								<Input
-									value={weights.propertyFeaturesWeight}
+									value={weights.propertyFeaturesWeight ?? 0}
 									onChange={HandleWeights}
 									type="text"
 									placeholder="Adjust importance of property features"
@@ -554,7 +578,7 @@ export default function CompareForm({
 							<textarea
 								name="propertyFeatures"
 								placeholder="Start searching property features..."
-								value={newFeature}
+								value={newFeature ?? ""}
 								onChange={handlePropertyFeaturesChange}
 								className={`h-32 w-full rounded-lg border p-4 text-[#aabfc6] ${isSpaceInvalid ? "border-red-500" : "border-[#444d56]"}`}
 							/>
@@ -577,21 +601,22 @@ export default function CompareForm({
 								</div>
 							)}
 							<div className="mt-4 flex flex-wrap gap-2">
-								{formData.propertyFeatures.map((feature, index) => (
-									<div
-										key={index}
-										className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
-									>
-										<span className="text-[#aabfc6]">{feature}</span>
-										<button
-											type="button"
-											className="text-red-500"
-											onClick={() => handleRemoveFeature(feature)}
+								{formData.propertyFeatures &&
+									formData.propertyFeatures.map((feature, index) => (
+										<div
+											key={index}
+											className="flex items-center space-x-2 rounded-full bg-[#444d56] px-4 py-2"
 										>
-											✖
-										</button>
-									</div>
-								))}
+											<span className="text-[#aabfc6]">{feature}</span>
+											<button
+												type="button"
+												className="text-red-500"
+												onClick={() => handleRemoveFeature(feature)}
+											>
+												✖
+											</button>
+										</div>
+									))}
 							</div>
 						</div>
 
@@ -605,7 +630,7 @@ export default function CompareForm({
 							<textarea
 								placeholder="optional"
 								name="description"
-								value={formData.description}
+								value={formData.description ?? ""}
 								onChange={handleChange}
 								className="h-32 w-full rounded-lg border border-[#444d56] p-4 text-[#aabfc6]"
 							/>
@@ -690,7 +715,7 @@ export default function CompareForm({
 							placeholder="Enter a URL"
 							type="text"
 							name="url"
-							value={propertyUrl}
+							value={propertyUrl ?? ""}
 							onChange={(e) => handlePropertyUrlInput(e)}
 						/>
 
