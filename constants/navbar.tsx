@@ -68,10 +68,16 @@ export default function Navbar() {
 					</Link>
 					{signedIn ? (
 						<>
-							<Link href="/compare" className="hover:text-[#4d7298]">
+							<Link
+								href="/compare"
+								className={`hover:text-[#4d7298] ${pathname === "/compare" ? "font-semibold hover:font-bold" : ""}`}
+							>
 								Compare
 							</Link>
-							<Link href="/profile" className="hover:text-[#4d7298]">
+							<Link
+								href="/profile"
+								className={`hover:text-[#4d7298] ${pathname === "/profile" ? "font-semibold hover:font-bold" : ""}`}
+							>
 								Profile
 							</Link>
 						</>
