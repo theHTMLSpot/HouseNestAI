@@ -1,8 +1,8 @@
 "use client";
 
-import Cta from "@/components/parts/cta";
-import FeatureCards from "@/components/parts/featureCards";
-import { Button, Title } from "@/components/ui/components";
+import Cta from "@/constants/cta";
+import FeatureCards from "@/constants/featureCards";
+import { Button, Title } from "@/components/components";
 import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
@@ -21,7 +21,6 @@ export default function LandingPage() {
 			<div
 				className="relative flex min-h-[85vh] w-full flex-col items-center justify-center bg-gradient-to-b from-[#000000] to-[#6c757d] bg-cover bg-center"
 				style={{ backgroundImage: `url("/images/hero.jpg")` }}
-
 			>
 				{/* Background overlay */}
 				<div className="absolute inset-0 bg-black opacity-50"></div>

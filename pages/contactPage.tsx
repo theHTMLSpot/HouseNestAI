@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Title, Input } from "@/components/ui/components";
+import { Title, Input } from "@/components/components";
 
 export default function ContactPage() {
-	
-
 	// Form state
 	const [formData, setFormData] = useState({
 		firstName: "",

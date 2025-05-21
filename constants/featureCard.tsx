@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "../ui/components";
+import { Card } from "@/components/components";
 
 export default function FeatureCard({
 	title,

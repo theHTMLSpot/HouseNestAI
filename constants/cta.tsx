@@ -1,4 +1,4 @@
-import { Title, Button } from "@/components/ui/components";
+import { Title, Button } from "@/components/components";
 
 import { useRouter } from "next/navigation";
 

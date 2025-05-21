@@ -1,8 +1,8 @@
 "use client";
 
-import { Title } from "@/components/ui/components";
-import FeatureCards from "@/components/parts/featureCards";
-import Cta from "@/components/parts/cta";
+import { Title } from "@/components/components";
+import FeatureCards from "@/constants/featureCards";
+import Cta from "@/constants/cta";
 import Image from "next/image";
 
 export default function FeaturesPage() {

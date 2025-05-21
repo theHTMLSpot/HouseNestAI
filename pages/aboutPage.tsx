@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Title } from "@/components/ui/components";
-import Cta from "@/components/parts/cta";
+import { Title } from "@/components/components";
+import Cta from "@/constants/cta";
 
 export default function AboutPage() {
 	return (

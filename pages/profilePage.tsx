@@ -1,4 +1,4 @@
-import { Button, Card, Title } from "@/components/ui/components";
+import { Button, Card, Title } from "@/components/components";
 import { UserProps } from "@/types/UserProps";
 import Link from "next/link";
 

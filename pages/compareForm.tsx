@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { Title, Input } from "@/components/ui/components";
-import { Card, Button } from "@/components/ui/components";
+import { Title, Input } from "@/components/components";
+import { Card, Button } from "@/components/components";
 import { Listing } from "@/types/UserProps";
 import Image from "next/image";
-import Slider from "@/components/ui/compare/slider";
+import Slider from "@/components/compare/slider";
 
 import * as formUtils from "@/utils/formUtils";
 import { propertyFeatures } from "@/utils/propertyFeatues";

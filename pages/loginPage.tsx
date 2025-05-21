@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Title, Input } from "@/components/ui/components";
+import { Title, Input } from "@/components/components";
 import Link from "next/link";
 import Image from "next/image";
 

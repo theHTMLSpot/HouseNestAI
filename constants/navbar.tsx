@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Button } from "../ui/components";
+import { Button } from "@/components/components";
 
 export default function Navbar() {
 	const router = useRouter();

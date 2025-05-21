@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card, Input } from "@/components/ui/components";
+import { Card, Input } from "@/components/components";
 
 export default function CardDetailsPage() {
 	const [formData, setFormData] = useState({
