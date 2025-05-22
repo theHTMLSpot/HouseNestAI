@@ -5,6 +5,7 @@ import FeatureCards from "@/constants/featureCards";
 import Testimonials from "@/constants/testimonials";
 import { Button, Title } from "@/components/components";
 import { useRouter } from "next/navigation";
+import OurMission from "@/constants/our_mission";
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -20,11 +21,12 @@ export default function LandingPage() {
 		<div className="flex w-screen flex-col items-center justify-center overflow-x-clip">
 			{/* hero section */}
 			<div
-				className="relative flex min-h-[85vh] w-full flex-col items-center justify-center bg-gradient-to-b from-[#000000] to-[#6c757d] bg-cover bg-center"
+				className="relative flex min-h-[85vh] w-full flex-col items-center justify-center bg-gradient-to-b from-[#0b0f11] to-[#ffffff] bg-cover bg-center"
 				style={{ backgroundImage: `url("/images/hero.jpg")` }}
 			>
 				{/* Background overlay */}
 				<div className="absolute inset-0 bg-black opacity-50"></div>
+				<div className="absolute inset-x-0 bottom-0 h-[35%] bg-gradient-to-t from-[#0b0f11] to-transparent"></div>
 
 				<Title
 					text="Compare Listings how you want when you want"
@@ -57,6 +59,8 @@ export default function LandingPage() {
 				className="mt-10 text-center text-4xl font-bold text-[#aabfc6]"
 			/>
 			<FeatureCards className="mt-3 mb-15" />
+			{/* Our Mission */}
+			<OurMission />
 			{/* Testimonials */}
 			<Testimonials />
 			{/* CTA Section */}
