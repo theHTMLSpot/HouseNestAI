@@ -2,6 +2,7 @@
 
 import Cta from "@/constants/cta";
 import FeatureCards from "@/constants/featureCards";
+import Testimonials from "@/constants/testimonials";
 import { Button, Title } from "@/components/components";
 import { useRouter } from "next/navigation";
 
@@ -50,7 +51,14 @@ export default function LandingPage() {
 				</div>
 			</div>
 			{/* features */}
-			<FeatureCards className="my-10" />
+			<Title
+				text="Features"
+				level={1}
+				className="mt-10 text-center text-4xl font-bold text-[#aabfc6]"
+			/>
+			<FeatureCards className="mt-3 mb-15" />
+			{/* Testimonials */}
+			<Testimonials />
 			{/* CTA Section */}
 			<Cta />
 		</div>

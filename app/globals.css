@@ -24,3 +24,30 @@ body {
 	color: var(--foreground);
 	font-family: Arial, Helvetica, sans-serif;
 }
+
+.custom-scrollbar {
+	display: flex;
+	gap: 1.5rem; /* roughly space-x-6 */
+	overflow-x: auto;
+	padding-bottom: 1rem; /* pb-4 */
+}
+
+/* Scrollbar styling for Webkit browsers (Chrome, Edge, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+	height: 6px; /* thin scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background-color: #111827; /* Tailwind gray-900 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #374151; /* Tailwind gray-700 */
+	border-radius: 9999px; /* rounded scrollbar thumb */
+}
+
+/* Firefox scrollbar styling */
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: #374151 #111827; /* thumb color, track color */
+}

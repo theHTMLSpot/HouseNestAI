@@ -72,7 +72,7 @@ export default function ContactPage() {
 	};
 
 	return (
-		<div className="min-h-[calc(100vh-5rem)] min-w-screen bg-[#11171a] p-8 text-gray-100">
+		<div className="min-h-[calc(100vh-4rem)] min-w-screen bg-[#11171a] p-8 text-gray-100">
 			<div className="flex w-screen flex-col items-center justify-center">
 				<Title
 					text="Contact Us"

@@ -1,0 +1,47 @@
+[
+	{
+		"id": 1,
+		"name": "Olivia Carter",
+		"title": "Customer",
+		"image": "/images/testimonials/olivia.jpg",
+		"text": "House Nest made finding our first home a stress-free experience. The comparison tools helped us narrow down choices quickly — and the neighborhood insights were a huge bonus.",
+		"rating": 5,
+		"date": "2025-02-11"
+	},
+	{
+		"id": 2,
+		"name": "Liam Peterson",
+		"title": "Employee",
+		"image": "/images/testimonials/liam.jpg",
+		"text": "Working here has shown me just how much care goes into every listing. Our team genuinely listens to user feedback and constantly improves the platform.",
+		"rating": 5,
+		"date": "2025-01-04"
+	},
+	{
+		"id": 3,
+		"name": "Samantha Reyes",
+		"title": "Contributor",
+		"image": "/images/testimonials/samantha.jpg",
+		"text": "As someone who writes guides and local reviews for House Nest, I love how committed the platform is to quality content. It’s not just listings — it’s about helping people make smarter home decisions.",
+		"rating": 4,
+		"date": "2024-12-22"
+	},
+	{
+		"id": 4,
+		"name": "Daniel Cho",
+		"title": "Customer",
+		"image": "/images/testimonials/daniel.jpg",
+		"text": "I’ve used a lot of property sites, but House Nest stands out. Clean design, fast search, and the ability to compare homes side-by-side saved me hours.",
+		"rating": 5,
+		"date": "2025-03-15"
+	},
+	{
+		"id": 5,
+		"name": "Isabelle Moreau",
+		"title": "Employee",
+		"image": "/images/testimonials/isabelle.jpg",
+		"text": "The mission of House Nest aligns perfectly with modern home seekers. We’re not just selling homes — we’re creating confidence in people’s decisions.",
+		"rating": 5,
+		"date": "2025-04-08"
+	}
+]

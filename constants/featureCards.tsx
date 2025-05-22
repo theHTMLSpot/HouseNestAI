@@ -5,7 +5,7 @@ import FeatureCard from "./featureCard";
 export default function FeatureCards({ className }: { className?: string }) {
 	return (
 		<div
-			className={`grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 ${className}`}
+			className={`grid w-screen grid-cols-1 place-items-center gap-6 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 ${className}`}
 		>
 			<FeatureCard
 				title="Effortless Search"
