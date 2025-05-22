@@ -41,7 +41,9 @@ export default function TestimonialCard({
 
 			<h1 className="mb-4 text-2xl font-bold">{name}</h1>
 
-			<p className="text-sm leading-relaxed text-gray-300">{children}</p>
+			<p className="h-[20%] overflow-clip text-sm leading-relaxed text-gray-300">
+				{children}
+			</p>
 
 			<div className="mt-6 border-t pt-4 text-sm text-gray-300">
 				{name}: {title} · {date}
